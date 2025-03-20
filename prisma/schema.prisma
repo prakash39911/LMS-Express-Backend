@@ -60,8 +60,10 @@ model Rating {
 }
 
 model EnrolledStudents {
-  id        String @id @default(cuid())
-  courseId  String
-  course    Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  studentId String
+  id         String @id @default(cuid())
+  courseId   String
+  course     Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  studentId  String
+  order_id   String
+  payment_id String
 }
