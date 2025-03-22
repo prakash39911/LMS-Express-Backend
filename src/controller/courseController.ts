@@ -14,7 +14,10 @@ export const createCourseHandler = async (req: Request, res: Response) => {
     // const user = await clerkClient.users.getUser(userId);
     // console.log("Logged in User Info", user);
 
-    const data = req.body;
+    const { ownerName, ...data } = req.body;
+
+    console.log("owner name", ownerName);
+    console.log("remaining data", data);
 
     const validated = createCourseFormSchema.safeParse(data);
 
@@ -31,6 +34,7 @@ export const createCourseHandler = async (req: Request, res: Response) => {
         description,
         price,
         main_image,
+        ownerName: ownerName,
         section: {
           create: section.map((eachSection) => ({
             sectionName: eachSection.sectionName,
@@ -65,8 +69,36 @@ export const createCourseHandler = async (req: Request, res: Response) => {
 };
 
 export const getAllCourse = async (req: Request, res: Response) => {
+  const { ratings, priceRange } = req.query;
+  const ratingsString = typeof ratings === "string" ? ratings : "";
+  const ratingArray = ratingsString ? ratingsString.split(",").map(Number) : [];
+
+  const pricesString = typeof priceRange === "string" ? priceRange : "";
+  const [minPrice, maxPrice] = pricesString.split(",");
+
   try {
+    const whereConditions: any[] = [];
+
+    if (minPrice) {
+      whereConditions.push({ price: { gte: parseInt(minPrice) } });
+    }
+    if (maxPrice) {
+      whereConditions.push({ price: { lte: parseInt(maxPrice) } });
+    }
+    if (ratingArray.length > 0) {
+      whereConditions.push({
+        rating: {
+          some: {
+            value: { in: ratingArray },
+          },
+        },
+      });
+    }
+
     const courses = await prisma.course.findMany({
+      where: {
+        AND: whereConditions,
+      },
       select: {
         id: true,
         title: true,
@@ -97,6 +129,7 @@ export const getAllCourse = async (req: Request, res: Response) => {
     res.status(200).json({ message: "All courses retrieved", data: courses });
   } catch (error) {
     console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -405,5 +438,70 @@ export const isLoggedInTeacherOwner = async (req: Request, res: Response) => {
     res.status(200).json({ status: true, data: isOwner });
   } catch (error) {
     res.status(500).json({ status: false, message: "Unable to fetch" });
+  }
+};
+
+export const isAlreadyPurchased = async (req: Request, res: Response) => {
+  try {
+    const { courseId } = req.params;
+    const { userId } = getAuth(req);
+
+    if (!userId) {
+      res.status(400).json({ status: false, message: "You are not logged in" });
+      return;
+    }
+
+    const hasPurchasedThisCourse = await prisma.enrolledStudents.findFirst({
+      where: {
+        courseId: courseId,
+        studentId: userId,
+      },
+    });
+
+    if (!hasPurchasedThisCourse) {
+      res.json({
+        status: false,
+        message: "You have not purchased this course",
+      });
+      return;
+    }
+
+    res
+      .status(200)
+      .json({ status: true, message: "You have bought this course already" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      status: false,
+      message: "Failed to Fetch Data, Internal Server Error",
+    });
+  }
+};
+
+export const addRating = async (req: Request, res: Response) => {
+  try {
+    const { userId } = getAuth(req);
+    const { courseId } = req.params;
+
+    const { value } = req.body;
+
+    if (!userId) {
+      res.status(400).json({ status: false, message: "You are not LoggedIn" });
+      return;
+    }
+
+    const result = await prisma.rating.create({
+      data: {
+        userId,
+        courseId,
+        value: value,
+      },
+    });
+
+    res
+      .status(200)
+      .json({ status: true, message: "Feedback submitted Successfully" });
+  } catch (error) {
+    res.status(500).json({ status: false, message: "Internal Server Error" });
   }
 };

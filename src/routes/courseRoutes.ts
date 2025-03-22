@@ -1,11 +1,13 @@
 import { Router } from "express";
 import {
+  addRating,
   createCourseHandler,
   getAllCourse,
   getCourseForId,
   getCoursesforStudent,
   getCoursesforTeacher,
   getParticularVideoUrl,
+  isAlreadyPurchased,
   isLoggedInTeacherOwner,
   playCourseForId,
 } from "../controller/courseController";
@@ -20,5 +22,7 @@ router.route("/video/:videoSectionId").get(getParticularVideoUrl);
 router.route("/getCourseForteacher").get(getCoursesforTeacher);
 router.route("/getCourseForStudent").get(getCoursesforStudent);
 router.route("/isOwnerOfVideo/:courseId").get(isLoggedInTeacherOwner);
+router.route("/isAlreadyPurchased/:courseId").get(isAlreadyPurchased);
+router.route("/giveRating/:courseId").post(addRating);
 
 export default router;
