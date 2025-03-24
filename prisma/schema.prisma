@@ -67,3 +67,18 @@ model EnrolledStudents {
   order_id   String
   payment_id String
 }
+
+model FilterPreset {
+  id              String            @id @default(cuid())
+  userId          String            @unique
+  SavedFilterData SavedFilterData[]
+}
+
+model SavedFilterData {
+  id             String       @id @default(cuid())
+  name           String       @unique
+  selectedRating String[]
+  priceRange     Int[]
+  FilterPresetId String
+  FilterPreset   FilterPreset @relation(fields: [FilterPresetId], references: [id], onDelete: Cascade)
+}

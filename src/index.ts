@@ -12,6 +12,7 @@ import cloudinarySignatureRoute from "../src/routes/signatureRoute";
 import cloudinaryRoute from "../src/routes/cloudinaryRoute";
 import userRoute from "./routes/userRoute";
 import paymentRoute from "./routes/paymentRoute";
+import filterRoute from "./routes/filterRoute";
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use("/api/deleteFromCloudinary", cloudinaryRoute);
 app.use("/api/course", courseRoute);
 app.use("/api/updateuserdata", userRoute);
 app.use("/api/payment", paymentRoute);
+app.use("/api/advancedFilter", filterRoute);
 
 // app.get("/protected", requireAuth(), async (req, res) => {
 //   // Use `getAuth()` to get the user's `userId`
