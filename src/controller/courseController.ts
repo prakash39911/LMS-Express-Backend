@@ -313,6 +313,11 @@ export const getCoursesforTeacher = async (req: Request, res: Response) => {
             },
           },
         },
+        enrolledStudents: {
+          select: {
+            id: true,
+          },
+        },
       },
     });
 
