@@ -1,15 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import courseRoute from "../src/routes/courseRoutes";
-import {
-  clerkClient,
-  clerkMiddleware,
-  getAuth,
-  requireAuth,
-} from "@clerk/express";
-import cloudinarySignatureRoute from "../src/routes/signatureRoute";
-import cloudinaryRoute from "../src/routes/cloudinaryRoute";
+import courseRoute from "./routes/courseRoutes";
+import { clerkMiddleware } from "@clerk/express";
+import cloudinarySignatureRoute from "./routes/signatureRoute";
+import cloudinaryRoute from "./routes/cloudinaryRoute";
 import userRoute from "./routes/userRoute";
 import paymentRoute from "./routes/paymentRoute";
 import filterRoute from "./routes/filterRoute";
