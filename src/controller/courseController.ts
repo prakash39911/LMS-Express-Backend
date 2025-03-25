@@ -490,6 +490,8 @@ export const addRating = async (req: Request, res: Response) => {
 
     const { value } = req.body;
 
+    console.log("Request is receiving", userId, courseId, value);
+
     if (!userId) {
       res.status(400).json({ status: false, message: "You are not LoggedIn" });
       return;
