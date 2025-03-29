@@ -41,6 +41,8 @@ export const handleVerifyPaymentSignature = async (
 ) => {
   const { userId } = getAuth(req);
 
+  console.log("is user exist in verify payment", userId);
+
   if (!userId) {
     throw new Error("User is not Authorized");
   }
