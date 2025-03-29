@@ -61,12 +61,16 @@ model Rating {
 
 model EnrolledStudents {
   id             String         @id @default(cuid())
+  order_id       String         @unique
+  amount         Int
+  currency       String
+  payment_status payment_status
+  studentId      String
+  email          String
+  contact        String
+  created_at     String
   courseId       String
   course         Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  studentId      String
-  order_id       String
-  payment_id     String
-  payment_status payment_status
 }
 
 model FilterPreset {
@@ -86,6 +90,6 @@ model SavedFilterData {
 
 enum payment_status {
   PENDING
-  CAPTURE
+  CAPTURED
   FAILED
 }

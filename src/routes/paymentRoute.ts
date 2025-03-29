@@ -4,16 +4,16 @@ import express from "express";
 import {
   handleCreateOrder,
   handleGetPaymentDetails,
-  handleVerifyPayment,
+  handleVerifyPaymentSignature,
   handleWebhookForPaymentCapture,
 } from "../controller/paymentController";
 
 const router = Router();
 
-router.route("/createOrder").post(express.json(), handleCreateOrder);
+router.route("/createOrder/:courseId").post(express.json(), handleCreateOrder);
 router
   .route("/verify-payment-signature")
-  .post(express.json(), handleVerifyPayment);
+  .post(express.json(), handleVerifyPaymentSignature);
 router
   .route("/webhook/rzpay/paymentcapture")
   .post(

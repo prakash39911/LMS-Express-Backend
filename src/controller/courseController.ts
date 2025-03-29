@@ -198,7 +198,7 @@ export async function playCourseForId(req: Request, res: Response) {
       where: {
         studentId: userId,
         courseId: courseId,
-        payment_status: "CAPTURE",
+        payment_status: "CAPTURED",
       },
     });
 

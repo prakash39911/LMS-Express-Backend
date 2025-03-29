@@ -9,6 +9,8 @@ import { getAuth } from "@clerk/express";
 
 export const handleCreateOrder = async (req: Request, res: Response) => {
   try {
+    const { userId } = getAuth(req);
+    const { courseId } = req.params;
     const data = req.body;
     const { amount } = data;
 
@@ -19,8 +21,8 @@ export const handleCreateOrder = async (req: Request, res: Response) => {
       currency: "INR",
       receipt: `Receipt no-${Date.now()}`,
       notes: {
-        key1: "value3",
-        key2: "value2",
+        userId: `${userId}`,
+        courseId: `${courseId}`,
       },
     };
 
@@ -33,20 +35,18 @@ export const handleCreateOrder = async (req: Request, res: Response) => {
   }
 };
 
-export const handleVerifyPayment = async (req: Request, res: Response) => {
+export const handleVerifyPaymentSignature = async (
+  req: Request,
+  res: Response
+) => {
   const { userId } = getAuth(req);
-  console.log("is User Id", userId);
 
   if (!userId) {
     throw new Error("User is not Authorized");
   }
 
-  const {
-    razorpay_order_id,
-    razorpay_payment_id,
-    razorpay_signature,
-    courseId,
-  } = req.body;
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+    req.body;
 
   const secret = process.env.RZPAY_SECRET_KEY!;
 
@@ -57,27 +57,15 @@ export const handleVerifyPayment = async (req: Request, res: Response) => {
       secret
     );
 
-    if (isValidSignature) {
-      // Update the order with payment details
-
-      const isStudentEnrolled = await prisma.enrolledStudents.create({
-        data: {
-          courseId: courseId,
-          studentId: userId,
-          order_id: razorpay_order_id,
-          payment_id: razorpay_payment_id,
-          payment_status: "PENDING",
-        },
-      });
-
-      res.status(200).json({
-        status: true,
-        paymentStatus: isStudentEnrolled.payment_status,
-      });
-    } else {
-      res.status(400).json({ status: false });
-      console.log("Payment verification failed");
+    if (!isValidSignature) {
+      res
+        .status(500)
+        .json({ status: false, message: "Payment is not verified" });
     }
+
+    res
+      .status(200)
+      .json({ status: true, message: "Payment verified successfully" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ status: false, message: "Error verifying payment" });
@@ -92,32 +80,45 @@ export const handleWebhookForPaymentCapture = async (
     const incomingSignature = req.headers["x-razorpay-signature"] as string;
 
     if (!incomingSignature) {
-      res.status(500).json({ status: false, message: "Webhook Error 1" });
+      res.status(500).json({ status: false, message: "No signature received" });
       return;
     }
 
-    console.log("Razorpay signature", incomingSignature);
     const inComingBody = req.body;
-    console.log("Incoming body data", inComingBody);
 
     const webHookSecret = process.env.RAZORPAY_WEBHOOK_SECRET!;
 
     const isValidSignature = validateWebhookSignature(
-      inComingBody,
+      JSON.stringify(inComingBody),
       incomingSignature,
       webHookSecret
     );
 
-    console.log("Is signature valid", isValidSignature);
-
     if (!isValidSignature) {
-      res.status(500).json({ status: false, message: "Webhook error 2" });
+      res.status(500).json({ status: false, message: "Invalid signature" });
       return;
     }
 
-    const data = req.body.payload;
+    const event = inComingBody.event;
+    const paymentData = inComingBody.payload.payment.entity;
 
-    console.log("incmoing data from webhook", data);
+    if (event !== "payment.captured") {
+      res.status(400).json({ status: false, message: "Payment Unsuccessfull" });
+    }
+
+    const updatePaymentInfo = await prisma.enrolledStudents.create({
+      data: {
+        order_id: paymentData.order_id,
+        amount: paymentData.amount,
+        currency: paymentData.currency,
+        payment_status: "CAPTURED",
+        studentId: paymentData.notes.userId,
+        email: paymentData.email,
+        contact: paymentData.contact,
+        created_at: paymentData.created_at.toString(),
+        courseId: paymentData.notes.courseId,
+      },
+    });
 
     res
       .status(200)
@@ -156,7 +157,7 @@ export const handleGetPaymentDetails = async (req: Request, res: Response) => {
 
     res.status(200).json({
       status: true,
-      message: "You have got the data",
+      message: "Your Payment was successfull",
       data: isAlreadyPurchased,
     });
   } catch (error) {

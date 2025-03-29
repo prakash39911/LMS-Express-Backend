@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import courseRoute from "./routes/courseRoutes";
@@ -8,6 +8,7 @@ import cloudinaryRoute from "./routes/cloudinaryRoute";
 import userRoute from "./routes/userRoute";
 import paymentRoute from "./routes/paymentRoute";
 import filterRoute from "./routes/filterRoute";
+import ngrok from "@ngrok/ngrok";
 
 dotenv.config();
 
@@ -21,6 +22,10 @@ app.use((req, res, next) => {
   return express.json()(req, res, next);
 });
 app.use(clerkMiddleware());
+
+app.get("/", (req: Request, res: Response) => {
+  res.send("Hello Server");
+});
 
 app.use("/api/sign-video", cloudinarySignatureRoute);
 app.use("/api/deleteFromCloudinary", cloudinaryRoute);
@@ -41,6 +46,6 @@ app.use("/api/advancedFilter", filterRoute);
 //   res.json({ data: user, message: "User Data retrieved" });
 // });
 
-app.listen(process.env.PORT || 8000, () => {
+app.listen(process.env.PORT || 8000, async () => {
   console.log("Server Started on PORT", process.env.PORT);
 });
