@@ -14,7 +14,12 @@ dotenv.config();
 const app = express();
 
 app.use(cors());
-app.use(express.json());
+app.use((req, res, next) => {
+  if (req.path === "/api/payment") {
+    return next(); // Skip JSON parsing for this route
+  }
+  return express.json()(req, res, next);
+});
 app.use(clerkMiddleware());
 
 app.use("/api/sign-video", cloudinarySignatureRoute);

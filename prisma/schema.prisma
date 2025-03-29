@@ -60,12 +60,13 @@ model Rating {
 }
 
 model EnrolledStudents {
-  id         String @id @default(cuid())
-  courseId   String
-  course     Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  studentId  String
-  order_id   String
-  payment_id String
+  id             String         @id @default(cuid())
+  courseId       String
+  course         Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  studentId      String
+  order_id       String
+  payment_id     String
+  payment_status payment_status
 }
 
 model FilterPreset {
@@ -81,4 +82,10 @@ model SavedFilterData {
   priceRange     Int[]
   FilterPresetId String
   FilterPreset   FilterPreset @relation(fields: [FilterPresetId], references: [id], onDelete: Cascade)
+}
+
+enum payment_status {
+  PENDING
+  CAPTURE
+  FAILED
 }
