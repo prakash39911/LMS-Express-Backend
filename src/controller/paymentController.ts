@@ -126,3 +126,40 @@ export const handleWebhookForPaymentCapture = async (
     console.error(error);
   }
 };
+
+export const handleGetPaymentDetails = async (req: Request, res: Response) => {
+  try {
+    const { userId } = getAuth(req);
+    const { courseId } = req.params;
+
+    if (!userId) {
+      res.status(400).json({ status: false, message: "You are not logged in" });
+      return;
+    }
+
+    const isAlreadyPurchased = await prisma.enrolledStudents.findFirst({
+      where: {
+        studentId: userId,
+        courseId: courseId,
+      },
+      select: {
+        payment_status: true,
+      },
+    });
+
+    if (!isAlreadyPurchased) {
+      res
+        .status(400)
+        .json({ status: false, message: "You have not Bought this course" });
+      return;
+    }
+
+    res.status(200).json({
+      status: true,
+      message: "You have got the data",
+      data: isAlreadyPurchased,
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};

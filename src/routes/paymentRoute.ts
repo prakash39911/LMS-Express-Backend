@@ -3,6 +3,7 @@ import express from "express";
 
 import {
   handleCreateOrder,
+  handleGetPaymentDetails,
   handleVerifyPayment,
   handleWebhookForPaymentCapture,
 } from "../controller/paymentController";
@@ -19,5 +20,5 @@ router
     express.raw({ type: "application/json" }),
     handleWebhookForPaymentCapture
   );
-
+router.route("/isPaymentCaptured/:courseId").get(handleGetPaymentDetails);
 export default router;
