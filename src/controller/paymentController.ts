@@ -110,6 +110,9 @@ export const handleWebhookForPaymentCapture = async (
 
     const updatePaymentInfo = await prisma.enrolledStudents.create({
       data: {
+        invoice_name: `invoice_${
+          Date.now().toString().slice(0, 4) + incomingSignature.slice(0, 4)
+        }`,
         order_id: paymentData.order_id,
         amount: paymentData.amount,
         currency: paymentData.currency,

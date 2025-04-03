@@ -8,21 +8,21 @@ import cloudinaryRoute from "./routes/cloudinaryRoute";
 import userRoute from "./routes/userRoute";
 import paymentRoute from "./routes/paymentRoute";
 import filterRoute from "./routes/filterRoute";
-import ngrok from "@ngrok/ngrok";
 
 dotenv.config();
 
 const app = express();
 
 app.use(cors());
+
 app.use((req, res, next) => {
   if (req.path === "/api/payment") {
     return next(); // Skip JSON parsing for this route
   }
   return express.json()(req, res, next);
 });
-app.use(clerkMiddleware());
 
+app.use(clerkMiddleware());
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello Server");
 });

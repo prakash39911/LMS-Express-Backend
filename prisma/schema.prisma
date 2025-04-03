@@ -68,6 +68,7 @@ model EnrolledStudents {
   studentId      String
   email          String
   contact        String
+  invoice_name   String
   created_at     String
   courseId       String
   course         Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)

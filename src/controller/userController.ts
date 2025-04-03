@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import { getAuth, clerkClient } from "@clerk/express";
 import { onBoardingFormSchema } from "@prakash39911/sharedlms";
+import prisma from "../lib/prisma";
+import { handleGeneratePdf } from "../lib/pdf";
+import { convertDate } from "../lib/utilityFunctions";
 
 export const addRoleHandler = async (req: Request, res: Response) => {
   const { userId } = getAuth(req);
@@ -29,5 +32,98 @@ export const addRoleHandler = async (req: Request, res: Response) => {
     res.status(200).json({ success: true });
   } catch (error) {
     throw new Error("Error while updating the User metaData");
+  }
+};
+
+export async function handleGetPurchaseDetails(req: Request, res: Response) {
+  try {
+    const { userId } = getAuth(req);
+
+    if (!userId) {
+      res.status(400).json({ status: false, message: "You are not logged in" });
+      return;
+    }
+
+    const billingInfo = await prisma.enrolledStudents.findMany({
+      where: {
+        studentId: userId,
+      },
+      select: {
+        id: true,
+        amount: true,
+        created_at: true,
+        course: {
+          select: {
+            title: true,
+          },
+        },
+      },
+    });
+
+    const convertedToArray = billingInfo.map((eachObj) => ({
+      id: eachObj.id,
+      amount: eachObj.amount / 100,
+      courseName: eachObj.course.title,
+      purchaseDate: convertDate(eachObj.created_at),
+    }));
+
+    res.status(200).json({
+      status: true,
+      message: "Data fetched successfully",
+      data: convertedToArray,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ status: false, message: "Server Error" });
+  }
+}
+
+export const handleGenerateDownloadPdf = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { id } = req.params;
+
+    const invoice_data = await prisma.enrolledStudents.findUnique({
+      where: {
+        id: id,
+      },
+      select: {
+        invoice_name: true,
+        created_at: true,
+        email: true,
+        contact: true,
+        amount: true,
+        course: {
+          select: {
+            title: true,
+          },
+        },
+      },
+    });
+
+    if (!invoice_data) {
+      res.status(400).json({ status: false, message: "No invoice found" });
+      return;
+    }
+
+    const structuredInvoiceData = {
+      invoice_name: invoice_data?.invoice_name,
+      created_at: invoice_data?.created_at,
+      email: invoice_data?.email,
+      contact: invoice_data?.contact,
+      courseName: invoice_data?.course.title,
+      amount: invoice_data?.amount / 100,
+    };
+
+    const pdfBuffer = await handleGeneratePdf(structuredInvoiceData);
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", "attachment; filename=invoice.pdf");
+    res.send(Buffer.from(pdfBuffer));
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ status: false, message: "Internal server error" });
   }
 };
