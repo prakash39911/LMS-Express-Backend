@@ -127,3 +127,39 @@ export const handleGenerateDownloadPdf = async (
     res.status(500).json({ status: false, message: "Internal server error" });
   }
 };
+
+export async function handleGetDashboardDetails(req: Request, res: Response) {
+  try {
+    const { userId } = getAuth(req);
+
+    if (!userId) {
+      res.status(400).json({ status: false, message: "You are not logged in" });
+      return;
+    }
+
+    const details = await prisma.course.findMany({
+      where: {
+        owner: userId,
+      },
+      select: {
+        id: true,
+        enrolledStudents: {
+          select: {
+            amount: true,
+            created_at: true,
+            courseId: true,
+          },
+        },
+      },
+    });
+
+    res.status(200).json({
+      status: true,
+      message: "Data received successfully",
+      data: details,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ status: false, message: "Internal Server Error" });
+  }
+}
