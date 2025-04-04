@@ -11,13 +11,7 @@ export const createCourseHandler = async (req: Request, res: Response) => {
       throw new Error("User is not Authorized");
     }
 
-    // const user = await clerkClient.users.getUser(userId);
-    // console.log("Logged in User Info", user);
-
     const { ownerName, ...data } = req.body;
-
-    console.log("owner name", ownerName);
-    console.log("remaining data", data);
 
     const validated = createCourseFormSchema.safeParse(data);
 
@@ -490,8 +484,6 @@ export const addRating = async (req: Request, res: Response) => {
     const { courseId } = req.params;
 
     const { value } = req.body;
-
-    console.log("Request is receiving", userId, courseId, value);
 
     if (!userId) {
       res.status(400).json({ status: false, message: "You are not LoggedIn" });

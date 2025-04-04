@@ -143,6 +143,7 @@ export async function handleGetDashboardDetails(req: Request, res: Response) {
       },
       select: {
         id: true,
+        title: true,
         enrolledStudents: {
           select: {
             amount: true,
