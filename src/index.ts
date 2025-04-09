@@ -56,8 +56,13 @@ app.use("/api/advancedFilter", filterRoute);
 (async function () {
   const isConnected = await checkConnection();
 
+  const indexName = process.env.ELASTIC_PRODUCTION_INDEX;
+
+  if (!indexName) {
+    throw new Error("Index name is required");
+  }
   if (isConnected) {
-    await createIndex(process.env.ELASTIC_DEVELOPMENT_INDEX!);
+    await createIndex(indexName);
   }
 })();
 

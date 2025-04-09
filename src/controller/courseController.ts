@@ -56,9 +56,15 @@ export const createCourseHandler = async (req: Request, res: Response) => {
     });
 
     if (isCourseCreated) {
+      const indexName = process.env.ELASTIC_PRODUCTION_INDEX;
+
+      if (!indexName) {
+        throw new Error("Index name is not present");
+      }
+
       try {
         await elasticClient.index({
-          index: process.env.ELASTIC_PRODUCTION_INDEX!,
+          index: indexName,
           document: {
             id: isCourseCreated.id,
             title: isCourseCreated.title,
@@ -83,31 +89,67 @@ export const createCourseHandler = async (req: Request, res: Response) => {
   }
 };
 
+const courseSelectObject = {
+  id: true,
+  title: true,
+  description: true,
+  price: true,
+  main_image: true,
+  rating: {
+    select: {
+      value: true,
+    },
+  },
+  section: {
+    select: {
+      sectionName: true,
+      videoSection: {
+        select: {
+          video_public_id: true,
+          video_title: true,
+          video_url: true,
+          video_thumbnailUrl: true,
+        },
+      },
+    },
+  },
+};
+
 // Helper function for getAllCourse
 const searchFunction = async (
   searchString: string
 ): Promise<searchFunctionReturnType[]> => {
+  if (!searchString || !searchString.trim()) {
+    return [];
+  }
+
+  const indexName = process.env.ELASTIC_PRODUCTION_INDEX;
+
+  if (!indexName) {
+    console.error("Elasticsearch index not configured");
+    return [];
+  }
+
   try {
     const response = await elasticClient.search({
-      index: process.env.ELASTIC_DEVELOPMENT_INDEX,
+      index: indexName,
       query: {
         match: {
-          title: searchString,
+          title: searchString.trim(),
         },
       },
-      sort: [
-        {
-          createdAt: {
-            order: "desc",
-          },
-        },
-      ],
+      sort: [{ createdAt: { order: "desc" } }],
+      // Add timeout to prevent long-running queries
+      timeout: "5s",
     });
+
+    console.log("Elastic search response", response.hits.hits);
+
     return response.hits.hits.map(
       (eachObj) => eachObj._source as searchFunctionReturnType
     );
   } catch (error) {
-    console.error("Error getting value from elastic", error);
+    console.error("Elasticsearch search error:", error);
     return [];
   }
 };
@@ -140,31 +182,7 @@ const filterFunction = async (pricesString: any, ratingArray: any) => {
       where: {
         AND: whereConditions,
       },
-      select: {
-        id: true,
-        title: true,
-        description: true,
-        price: true,
-        main_image: true,
-        rating: {
-          select: {
-            value: true,
-          },
-        },
-        section: {
-          select: {
-            sectionName: true,
-            videoSection: {
-              select: {
-                video_public_id: true,
-                video_title: true,
-                video_url: true,
-                video_thumbnailUrl: true,
-              },
-            },
-          },
-        },
-      },
+      select: courseSelectObject,
     });
 
     return courses;
@@ -178,42 +196,17 @@ const filterFunction = async (pricesString: any, ratingArray: any) => {
 const getCourseForParticularId = async (courseId: string) => {
   try {
     const course = await prisma.course.findFirst({
-      where: {
-        id: courseId,
-      },
-      select: {
-        id: true,
-        title: true,
-        description: true,
-        price: true,
-        main_image: true,
-        rating: {
-          select: {
-            value: true,
-          },
-        },
-        section: {
-          select: {
-            sectionName: true,
-            videoSection: {
-              select: {
-                video_public_id: true,
-                video_title: true,
-                video_url: true,
-                video_thumbnailUrl: true,
-              },
-            },
-          },
-        },
-      },
+      where: { id: courseId },
+      select: courseSelectObject,
     });
+
     if (!course) {
-      throw new Error("Unable to find course");
+      throw new Error(`Course not found with ID: ${courseId}`);
     }
 
     return course;
   } catch (error) {
-    console.error("Error getting course drom DB", error);
+    console.error(`Error retrieving course with ID ${courseId}:`, error);
     throw error;
   }
 };
@@ -229,63 +222,63 @@ export const getAllCourse = async (req: Request, res: Response) => {
 
     const pricesString = typeof priceRange === "string" ? priceRange : "";
 
-    const searchString = typeof search === "string" ? search : "";
+    const searchString = typeof search === "string" ? search.trim() : "";
+
+    let results: any[];
 
     // Filter and search query, both does not exist
-    if (
-      searchString.length === 0 &&
-      ratingArray.length === 0 &&
-      pricesString.length === 0
-    ) {
-      const response = await filterFunction(pricesString, ratingArray);
-      res.status(200).json({ status: true, data: response });
+    if (!searchString && ratingArray.length === 0 && !pricesString) {
+      results = await filterFunction("", []);
     }
 
     // Only Search Query Exists
-    else if (
-      searchString.length > 0 &&
-      ratingsString.length === 0 &&
-      pricesString.length === 0
-    ) {
-      const response = await searchFunction(searchString);
+    else if (searchString && ratingArray.length === 0 && !pricesString) {
+      const elasticResults = await searchFunction(searchString);
       console.log(
-        `Elastic search result for search query ${searchString} `,
-        response
+        `Elastic search results count for "${searchString}":`,
+        elasticResults.length
       );
 
-      let arr = [];
-
-      for (let i = 0; i < response.length; i++) {
-        const element = response[i];
-        const data = await getCourseForParticularId(element.id);
-        arr.push(data);
+      if (elasticResults.length === 0) {
+        results = [];
+      } else {
+        results = await Promise.all(
+          elasticResults.map((item) =>
+            getCourseForParticularId(item.id).catch(() => null)
+          )
+        );
+        // Filter out any null results from failed queries
+        results = results.filter(Boolean);
       }
-
-      res.status(200).json({ status: true, data: arr });
     }
 
     // If search query is empty and other filters exits
-    else if (
-      searchString.length === 0 &&
-      (ratingArray.length !== 0 || pricesString.length !== 0)
-    ) {
-      const response = await filterFunction(pricesString, ratingArray);
-      res.status(200).json({ status: true, data: response });
+    else if (!searchString && (ratingArray.length > 0 || pricesString)) {
+      results = await filterFunction(pricesString, ratingArray);
     } else {
       // All filter and search query exist, intersection result will be returned
       const searchResults = await searchFunction(searchString);
 
-      // Get filtered courses
-      const filteredCourses = await filterFunction(pricesString, ratingArray);
+      if (searchResults.length === 0) {
+        results = [];
+      } else {
+        // Get filtered courses
+        const filteredCourses = await filterFunction(pricesString, ratingArray);
 
-      // Find intersection based on course IDs
-      const searchResultIds = new Set(searchResults.map((result) => result.id));
-      const intersectionResults = filteredCourses.filter((course) =>
-        searchResultIds.has(course.id)
-      );
-
-      res.status(200).json({ status: true, data: intersectionResults });
+        // Find intersection based on course IDs
+        const searchResultIds = new Set(
+          searchResults.map((result) => result.id)
+        );
+        results = filteredCourses.filter((course) =>
+          searchResultIds.has(course.id)
+        );
+      }
     }
+
+    res.status(200).json({
+      status: true,
+      data: results,
+    });
   } catch (error) {
     console.error("Error in getAllCourse", error);
     res.status(500).json({
@@ -298,6 +291,10 @@ export const getAllCourse = async (req: Request, res: Response) => {
 export async function getCourseForId(req: Request, res: Response) {
   try {
     const { courseId } = req.params;
+
+    if (!courseId) {
+      throw new Error("Course ID is required");
+    }
 
     const course = await prisma.course.findUnique({
       where: {
