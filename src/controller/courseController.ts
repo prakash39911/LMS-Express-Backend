@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { createCourseFormSchema } from "@prakash39911/sharedlms";
 import prisma from "../lib/prisma";
 import { getAuth } from "@clerk/express";
+import { elasticClient } from "../lib/elasticClient";
+import { eachCourseType, searchFunctionReturnType } from "../types";
 
 export const createCourseHandler = async (req: Request, res: Response) => {
   try {
@@ -53,6 +55,25 @@ export const createCourseHandler = async (req: Request, res: Response) => {
       },
     });
 
+    if (isCourseCreated) {
+      try {
+        await elasticClient.index({
+          index: "lms_title_search",
+          document: {
+            id: isCourseCreated.id,
+            title: isCourseCreated.title,
+            description: isCourseCreated.description,
+            createatedAt: new Date(isCourseCreated.createdAt)
+              .toISOString()
+              .split("T")[0],
+          },
+        });
+        console.log("Date Ingested Successfully to Elastic");
+      } catch (error) {
+        console.error("Error while ingesting data to Elastic", error);
+      }
+    }
+
     res.status(200).json({
       message: "Course Created Successfully",
       course: isCourseCreated,
@@ -62,33 +83,59 @@ export const createCourseHandler = async (req: Request, res: Response) => {
   }
 };
 
-export const getAllCourse = async (req: Request, res: Response) => {
-  const { ratings, priceRange } = req.query;
-  const ratingsString = typeof ratings === "string" ? ratings : "";
-  const ratingArray = ratingsString ? ratingsString.split(",").map(Number) : [];
-
-  const pricesString = typeof priceRange === "string" ? priceRange : "";
-  const [minPrice, maxPrice] = pricesString.split(",");
-
+// Helper function for getAllCourse
+const searchFunction = async (
+  searchString: string
+): Promise<searchFunctionReturnType[]> => {
   try {
-    const whereConditions: any[] = [];
-
-    if (minPrice) {
-      whereConditions.push({ price: { gte: parseInt(minPrice) } });
-    }
-    if (maxPrice) {
-      whereConditions.push({ price: { lte: parseInt(maxPrice) } });
-    }
-    if (ratingArray.length > 0) {
-      whereConditions.push({
-        rating: {
-          some: {
-            value: { in: ratingArray },
+    const response = await elasticClient.search({
+      index: "lms_title_search",
+      query: {
+        match: {
+          title: searchString,
+        },
+      },
+      sort: [
+        {
+          createdAt: {
+            order: "desc",
           },
         },
-      });
-    }
+      ],
+    });
+    return response.hits.hits.map(
+      (eachObj) => eachObj._source as searchFunctionReturnType
+    );
+  } catch (error) {
+    console.error("Error getting value from elastic", error);
+    return [];
+  }
+};
 
+// Helper function for getAllCourse
+const filterFunction = async (pricesString: any, ratingArray: any) => {
+  const pricesArray = pricesString.split(",");
+  const [minPrice, maxPrice] = pricesArray;
+
+  const whereConditions: any[] = [];
+
+  if (minPrice) {
+    whereConditions.push({ price: { gte: parseInt(minPrice) } });
+  }
+  if (maxPrice) {
+    whereConditions.push({ price: { lte: parseInt(maxPrice) } });
+  }
+  if (ratingArray.length > 0) {
+    whereConditions.push({
+      rating: {
+        some: {
+          value: { in: ratingArray },
+        },
+      },
+    });
+  }
+
+  try {
     const courses = await prisma.course.findMany({
       where: {
         AND: whereConditions,
@@ -120,10 +167,131 @@ export const getAllCourse = async (req: Request, res: Response) => {
       },
     });
 
-    res.status(200).json({ message: "All courses retrieved", data: courses });
+    return courses;
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
+    console.error("Error while applying filter", error);
+    throw new Error("Failed to filter courses");
+  }
+};
+
+// Helper function for getAllCourse
+const getCourseForParticularId = async (courseId: string) => {
+  try {
+    const course = await prisma.course.findFirst({
+      where: {
+        id: courseId,
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        price: true,
+        main_image: true,
+        rating: {
+          select: {
+            value: true,
+          },
+        },
+        section: {
+          select: {
+            sectionName: true,
+            videoSection: {
+              select: {
+                video_public_id: true,
+                video_title: true,
+                video_url: true,
+                video_thumbnailUrl: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    if (!course) {
+      throw new Error("Unable to find course");
+    }
+
+    return course;
+  } catch (error) {
+    console.error("Error getting course drom DB", error);
+    throw error;
+  }
+};
+
+export const getAllCourse = async (req: Request, res: Response) => {
+  try {
+    const { ratings, priceRange, search } = req.query;
+
+    const ratingsString = typeof ratings === "string" ? ratings : "";
+    const ratingArray = ratingsString
+      ? ratingsString.split(",").map(Number)
+      : [];
+
+    const pricesString = typeof priceRange === "string" ? priceRange : "";
+
+    const searchString = typeof search === "string" ? search : "";
+
+    // Filter and search query, both does not exist
+    if (
+      searchString.length === 0 &&
+      ratingArray.length === 0 &&
+      pricesString.length === 0
+    ) {
+      const response = await filterFunction(pricesString, ratingArray);
+      res.status(200).json({ status: true, data: response });
+    }
+
+    // Only Search Query Exists
+    else if (
+      searchString.length > 0 &&
+      ratingsString.length === 0 &&
+      pricesString.length === 0
+    ) {
+      const response = await searchFunction(searchString);
+      console.log(
+        `Elastic search result for search query ${searchString} `,
+        response
+      );
+
+      let arr = [];
+
+      for (let i = 0; i < response.length; i++) {
+        const element = response[i];
+        const data = await getCourseForParticularId(element.id);
+        arr.push(data);
+      }
+
+      res.status(200).json({ status: true, data: arr });
+    }
+
+    // If search query is empty and other filters exits
+    else if (
+      searchString.length === 0 &&
+      (ratingArray.length !== 0 || pricesString.length !== 0)
+    ) {
+      const response = await filterFunction(pricesString, ratingArray);
+      res.status(200).json({ status: true, data: response });
+    } else {
+      // All filter and search query exist, intersection result will be returned
+      const searchResults = await searchFunction(searchString);
+
+      // Get filtered courses
+      const filteredCourses = await filterFunction(pricesString, ratingArray);
+
+      // Find intersection based on course IDs
+      const searchResultIds = new Set(searchResults.map((result) => result.id));
+      const intersectionResults = filteredCourses.filter((course) =>
+        searchResultIds.has(course.id)
+      );
+
+      res.status(200).json({ status: true, data: intersectionResults });
+    }
+  } catch (error) {
+    console.error("Error in getAllCourse", error);
+    res.status(500).json({
+      status: false,
+      message: "An error occured while fetching course",
+    });
   }
 };
 

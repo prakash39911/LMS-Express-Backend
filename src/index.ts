@@ -8,6 +8,11 @@ import cloudinaryRoute from "./routes/cloudinaryRoute";
 import userRoute from "./routes/userRoute";
 import paymentRoute from "./routes/paymentRoute";
 import filterRoute from "./routes/filterRoute";
+import {
+  checkConnection,
+  createIndex,
+  elasticClient,
+} from "./lib/elasticClient";
 
 dotenv.config();
 
@@ -45,6 +50,16 @@ app.use("/api/advancedFilter", filterRoute);
 
 //   res.json({ data: user, message: "User Data retrieved" });
 // });
+
+// Test connection
+
+(async function () {
+  const isConnected = await checkConnection();
+
+  if (isConnected) {
+    await createIndex("lms_title_search");
+  }
+})();
 
 app.listen(process.env.PORT || 8000, async () => {
   console.log("Server Started on PORT", process.env.PORT);
