@@ -57,7 +57,7 @@ app.use("/api/advancedFilter", filterRoute);
   const isConnected = await checkConnection();
 
   if (isConnected) {
-    await createIndex("lms_title_search");
+    await createIndex(process.env.ELASTIC_PRODUCTION_INDEX!);
   }
 })();
 

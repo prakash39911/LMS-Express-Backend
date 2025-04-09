@@ -89,7 +89,7 @@ const searchFunction = async (
 ): Promise<searchFunctionReturnType[]> => {
   try {
     const response = await elasticClient.search({
-      index: "lms_title_search",
+      index: process.env.ELASTIC_PRODUCTION_INDEX,
       query: {
         match: {
           title: searchString,
