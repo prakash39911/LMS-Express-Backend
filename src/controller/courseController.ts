@@ -58,7 +58,7 @@ export const createCourseHandler = async (req: Request, res: Response) => {
     if (isCourseCreated) {
       try {
         await elasticClient.index({
-          index: "lms_title_search",
+          index: process.env.ELASTIC_PRODUCTION_INDEX!,
           document: {
             id: isCourseCreated.id,
             title: isCourseCreated.title,
@@ -89,7 +89,7 @@ const searchFunction = async (
 ): Promise<searchFunctionReturnType[]> => {
   try {
     const response = await elasticClient.search({
-      index: process.env.ELASTIC_PRODUCTION_INDEX,
+      index: process.env.ELASTIC_DEVELOPMENT_INDEX,
       query: {
         match: {
           title: searchString,

@@ -57,7 +57,7 @@ app.use("/api/advancedFilter", filterRoute);
   const isConnected = await checkConnection();
 
   if (isConnected) {
-    await createIndex(process.env.ELASTIC_PRODUCTION_INDEX!);
+    await createIndex(process.env.ELASTIC_DEVELOPMENT_INDEX!);
   }
 })();
 
