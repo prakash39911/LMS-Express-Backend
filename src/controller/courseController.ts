@@ -3,7 +3,7 @@ import { createCourseFormSchema } from "@prakash39911/sharedlms";
 import prisma from "../lib/prisma";
 import { getAuth } from "@clerk/express";
 import { elasticClient } from "../lib/elasticClient";
-import { eachCourseType, searchFunctionReturnType } from "../types";
+import { searchFunctionReturnType } from "../types";
 
 export const createCourseHandler = async (req: Request, res: Response) => {
   try {
@@ -87,6 +87,98 @@ export const createCourseHandler = async (req: Request, res: Response) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+export const handleCreateCourseProgress = async (
+  req: Request,
+  res: Response
+) => {
+  const { courseId } = req.params;
+  const { userId } = getAuth(req);
+
+  if (!courseId || !userId) {
+    res
+      .status(400)
+      .json({ status: false, message: "Required details unavailable" });
+    return;
+  }
+
+  const courseDetails = await prisma.course.findFirst({
+    where: {
+      id: courseId,
+    },
+    select: {
+      id: true,
+      section: {
+        select: {
+          id: true,
+          videoSection: {
+            select: {
+              id: true,
+              video_duration: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!courseDetails) {
+    res
+      .status(400)
+      .json({ status: false, message: "Course details are not present" });
+    return;
+  }
+
+  const enrollmentId = await prisma.enrolledStudents.findFirst({
+    where: {
+      studentId: userId,
+      courseId: courseId,
+      payment_status: "CAPTURED",
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  if (!enrollmentId) {
+    res.status(400).json({
+      status: false,
+      message: "Student is not enrolled into the course",
+    });
+    return;
+  }
+
+  const isCourseProgressCreated = await prisma.courseProgress.create({
+    data: {
+      enrolledStudentId: enrollmentId.id,
+      courseId: courseId,
+      studentId: userId,
+      sectionProgress: {
+        create: courseDetails.section.map((eachSection) => ({
+          sectionId: eachSection.id,
+          videoProgress: {
+            create: eachSection.videoSection.map((eachVideoSection) => ({
+              videoSectionId: eachVideoSection.id,
+              video_duration: eachVideoSection.video_duration,
+              userId: userId,
+            })),
+          },
+        })),
+      },
+    },
+    include: {
+      sectionProgress: {
+        include: {
+          videoProgress: true,
+        },
+      },
+    },
+  });
+
+  res
+    .status(200)
+    .json({ status: true, message: "Course progress is created successfully" });
 };
 
 const courseSelectObject = {
@@ -536,6 +628,18 @@ export const getCoursesforStudent = async (req: Request, res: Response) => {
                 video_title: true,
                 video_url: true,
                 video_thumbnailUrl: true,
+              },
+            },
+          },
+        },
+        enrolledStudents: {
+          select: {
+            id: true,
+            studentId: true,
+            courseProgress: {
+              select: {
+                completionPercentage: true,
+                isCompleted: true,
               },
             },
           },

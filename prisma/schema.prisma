@@ -6,6 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  output   = "app/generated/prisma/client"
 }
 
 datasource db {
@@ -60,8 +61,8 @@ model Rating {
 }
 
 model EnrolledStudents {
-  id             String         @id @default(cuid())
-  order_id       String         @unique
+  id             String          @id @default(cuid())
+  order_id       String          @unique
   amount         Int
   currency       String
   payment_status payment_status
@@ -71,7 +72,41 @@ model EnrolledStudents {
   invoice_name   String
   created_at     String
   courseId       String
-  course         Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  course         Course          @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseProgress CourseProgress?
+}
+
+model CourseProgress {
+  id                   String            @id @default(cuid())
+  enrolledStudent      EnrolledStudents  @relation(fields: [enrolledStudentId], references: [id], onDelete: Cascade)
+  enrolledStudentId    String            @unique
+  courseId             String
+  studentId            String
+  completionPercentage Float             @default(0)
+  isCompleted          Boolean           @default(false)
+  sectionProgress      SectionProgress[]
+}
+
+model SectionProgress {
+  id                   String          @id @default(cuid())
+  courseProgress       CourseProgress  @relation(fields: [courseProgressId], references: [id], onDelete: Cascade)
+  courseProgressId     String
+  sectionId            String
+  completionPercentage Float           @default(0)
+  isCompleted          Boolean         @default(false)
+  videoProgress        VideoProgress[]
+}
+
+model VideoProgress {
+  id                   String          @id @default(cuid())
+  sectionProgress      SectionProgress @relation(fields: [sectionProgressId], references: [id], onDelete: Cascade)
+  sectionProgressId    String
+  videoSectionId       String
+  video_duration       Float
+  userId               String
+  watchedSeconds       Float           @default(0)
+  completionPercentage Float           @default(0)
+  isCompleted          Boolean         @default(false)
 }
 
 model FilterPreset {

@@ -140,9 +140,7 @@ export const getFilterPresetForUser = async (req: Request, res: Response) => {
     });
 
     if (!result) {
-      res
-        .status(400)
-        .json({ status: false, message: "No filter preset found" });
+      res.status(200).json({ status: false, message: "Preset not found" });
       return;
     }
 

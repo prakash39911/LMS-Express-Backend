@@ -39,17 +39,15 @@ export const handleVerifyPaymentSignature = async (
   req: Request,
   res: Response
 ) => {
-  const { userId } = getAuth(req);
-
-  if (!userId) {
-    throw new Error("User is not Authorized");
-  }
-
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
     req.body;
 
-  const secret = process.env.RZPAY_SECRET_KEY!;
+  const secret = process.env.RZPAY_SECRET_KEY;
 
+  if (!secret) {
+    console.error("Secret is not loaded properly");
+    return;
+  }
   try {
     const isValidSignature = validatePaymentVerification(
       { order_id: razorpay_order_id, payment_id: razorpay_payment_id },
@@ -86,12 +84,17 @@ export const handleWebhookForPaymentCapture = async (
 
     const inComingBody = req.body;
 
-    const webHookSecret = process.env.RAZORPAY_WEBHOOK_SECRET!;
+    const secretWbhook = process.env.RAZORPAY_WEBHOOK_SECRET;
+
+    if (!secretWbhook) {
+      console.error("RzPay Secret not loaded");
+      return;
+    }
 
     const isValidSignature = validateWebhookSignature(
       JSON.stringify(inComingBody),
       incomingSignature,
-      webHookSecret
+      secretWbhook
     );
 
     if (!isValidSignature) {

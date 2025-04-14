@@ -29,3 +29,11 @@ export type eachCourseType = {
   }[];
   enrolledStudents: { id: string }[];
 };
+
+export type section = {
+  id: string;
+  videoSection: {
+    id: string;
+    video_duration: number;
+  }[];
+}[];

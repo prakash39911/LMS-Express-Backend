@@ -8,11 +8,7 @@ import cloudinaryRoute from "./routes/cloudinaryRoute";
 import userRoute from "./routes/userRoute";
 import paymentRoute from "./routes/paymentRoute";
 import filterRoute from "./routes/filterRoute";
-import {
-  checkConnection,
-  createIndex,
-  elasticClient,
-} from "./lib/elasticClient";
+import { checkConnection, createIndex } from "./lib/elasticClient";
 
 dotenv.config();
 

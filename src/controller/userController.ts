@@ -3,7 +3,7 @@ import { getAuth, clerkClient } from "@clerk/express";
 import { onBoardingFormSchema } from "@prakash39911/sharedlms";
 import prisma from "../lib/prisma";
 import { handleGeneratePdf } from "../lib/pdf";
-import { convertDate } from "../lib/utilityFunctions";
+import { calTotalCourseDuration, convertDate } from "../lib/utilityFunctions";
 
 export const addRoleHandler = async (req: Request, res: Response) => {
   const { userId } = getAuth(req);
@@ -164,3 +164,203 @@ export async function handleGetDashboardDetails(req: Request, res: Response) {
     res.status(500).json({ status: false, message: "Internal Server Error" });
   }
 }
+
+export const handleCourseProgressUpdate = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { userId } = getAuth(req);
+    const { videoId, timeInSeconds, courseId } = req.body;
+
+    if (!userId) {
+      res.status(400).json({ status: false, message: "You are not logged in" });
+      return;
+    }
+
+    if (!videoId) {
+      res.status(400).json({ status: false, message: "Insufficient Details" });
+      return;
+    }
+
+    const videoDetails = await prisma.videoProgress.findFirst({
+      where: {
+        userId: userId,
+        videoSectionId: videoId,
+      },
+    });
+
+    if (!videoDetails) {
+      res
+        .status(400)
+        .json({ status: false, message: "Particular video not found" });
+      return;
+    }
+
+    if (
+      videoDetails.watchedSeconds >= timeInSeconds &&
+      timeInSeconds <= videoDetails.video_duration
+    ) {
+      res
+        .status(200)
+        .json({ status: false, message: "No Need to update watched Seconds" });
+      return;
+    }
+
+    const currentVideoLength = videoDetails.video_duration;
+    const videoPlayedForSeconds = timeInSeconds;
+
+    const isVideoProgressUpdated = await prisma.videoProgress.update({
+      where: {
+        id: videoDetails.id,
+      },
+      data: {
+        watchedSeconds: videoPlayedForSeconds,
+        completionPercentage: Math.floor(
+          (videoPlayedForSeconds / currentVideoLength) * 100
+        ),
+        isCompleted:
+          videoPlayedForSeconds / currentVideoLength > 0.85 ? true : false,
+      },
+    });
+
+    const courseDetails = await prisma.course.findFirst({
+      where: {
+        id: courseId,
+      },
+      select: {
+        section: {
+          select: {
+            id: true,
+            videoSection: {
+              select: {
+                id: true,
+                video_duration: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!courseDetails) {
+      console.error("Course details absent");
+      return;
+    }
+
+    const courseProgressDetails = await prisma.courseProgress.findFirst({
+      where: {
+        courseId: courseId,
+        studentId: userId,
+      },
+      select: {
+        id: true,
+        sectionProgress: {
+          select: {
+            id: true,
+            videoProgress: {
+              select: {
+                watchedSeconds: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!courseProgressDetails) {
+      res.status(400).json({
+        status: false,
+        message: "Course progress details not present",
+      });
+      return;
+    }
+
+    const totalWatchedSecondsArray = courseProgressDetails?.sectionProgress.map(
+      (eachSection) => {
+        return eachSection.videoProgress.reduce(
+          (accumulator, currentValue) =>
+            (accumulator += currentValue.watchedSeconds),
+          0
+        );
+      }
+    );
+
+    const totalWatchedSeconds = totalWatchedSecondsArray.reduce(
+      (accu, curr) => (accu += curr)
+    );
+
+    const totalCourseDuration = calTotalCourseDuration(courseDetails?.section);
+
+    const isCourseProgressCreated = await prisma.courseProgress.update({
+      where: {
+        id: courseProgressDetails?.id,
+      },
+      data: {
+        completionPercentage: Math.floor(
+          (totalWatchedSeconds / totalCourseDuration) * 100
+        ),
+        isCompleted:
+          totalWatchedSeconds / totalCourseDuration > 0.9 ? true : false,
+      },
+    });
+
+    res
+      .status(200)
+      .json({ status: true, message: "Progress Updated Successfully" });
+  } catch (error) {
+    console.error("Error while updating course progress", error);
+    res.status(500).json({ status: false, message: "Something went wrong" });
+  }
+};
+
+export const handleGetCourseProgressStatus = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { userId } = getAuth(req);
+
+    if (!userId) {
+      res.status(400).json({ status: false, message: "You are not logged In" });
+      return;
+    }
+
+    const isEnrolled = await prisma.enrolledStudents.findMany({
+      where: {
+        studentId: userId,
+      },
+      select: {
+        courseProgress: {
+          select: {
+            courseId: true,
+            completionPercentage: true,
+            isCompleted: true,
+            sectionProgress: {
+              select: {
+                sectionId: true,
+                videoProgress: {
+                  select: {
+                    videoSectionId: true,
+                    completionPercentage: true,
+                    isCompleted: true,
+                    watchedSeconds: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    res.status(200).json({
+      status: true,
+      message: "Data Retrieved Successfully",
+      data: isEnrolled,
+    });
+  } catch (error) {
+    console.error("Error While Course Progress Data", error);
+    res.status(500).json({ status: false, message: "Something went wrong" });
+  }
+};

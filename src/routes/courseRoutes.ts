@@ -7,6 +7,7 @@ import {
   getCoursesforStudent,
   getCoursesforTeacher,
   getParticularVideoUrl,
+  handleCreateCourseProgress,
   isAlreadyPurchased,
   isLoggedInTeacherOwner,
   playCourseForId,
@@ -24,5 +25,8 @@ router.route("/getCourseForStudent").get(getCoursesforStudent);
 router.route("/isOwnerOfVideo/:courseId").get(isLoggedInTeacherOwner);
 router.route("/isAlreadyPurchased/:courseId").get(isAlreadyPurchased);
 router.route("/giveRating/:courseId").post(addRating);
+router
+  .route("/createCourseProgress/:courseId")
+  .post(handleCreateCourseProgress);
 
 export default router;
