@@ -222,19 +222,27 @@ const searchFunction = async (
     return [];
   }
 
+  console.log("Search string:", searchString);
+  console.log("Index name:", indexName);
+
   try {
     const response = await elasticClient.search({
       index: indexName,
       query: {
-        match: {
-          title: searchString.trim(),
+        bool: {
+          should: [
+            { match_phrase_prefix: { title: searchString.trim() } },
+            {
+              match: {
+                title: { query: searchString.trim(), fuzziness: "AUTO" },
+              },
+            },
+          ],
         },
       },
-      sort: [{ createdAt: { order: "desc" } }],
-      // Add timeout to prevent long-running queries
-      timeout: "5s",
     });
 
+    console.log("Raw response:", JSON.stringify(response));
     console.log("Elastic search response", response.hits.hits);
 
     return response.hits.hits.map(
