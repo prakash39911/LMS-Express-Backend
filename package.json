@@ -25,7 +25,9 @@
   "dependencies": {
     "@clerk/express": "^1.3.50",
     "@elastic/elasticsearch": "^8.17.1",
+    "@google/genai": "^0.9.0",
     "@ngrok/ngrok": "^1.4.1",
+    "@pinecone-database/pinecone": "^5.1.1",
     "@prakash39911/sharedlms": "^1.1.1",
     "@prisma/client": "^6.6.0",
     "bcryptjs": "^3.0.2",
@@ -34,6 +36,7 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "jspdf": "^3.0.1",
+    "openai": "^4.95.1",
     "razorpay": "^2.9.6",
     "stream": "^0.0.3"
   }

@@ -4205,6 +4205,8 @@ export namespace Prisma {
     video_public_id: string | null
     video_thumbnailUrl: string | null
     video_duration: number | null
+    transcription: string | null
+    transcription_summary: string | null
     sectionId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -4217,6 +4219,8 @@ export namespace Prisma {
     video_public_id: string | null
     video_thumbnailUrl: string | null
     video_duration: number | null
+    transcription: string | null
+    transcription_summary: string | null
     sectionId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -4229,6 +4233,8 @@ export namespace Prisma {
     video_public_id: number
     video_thumbnailUrl: number
     video_duration: number
+    transcription: number
+    transcription_summary: number
     sectionId: number
     createdAt: number
     updatedAt: number
@@ -4251,6 +4257,8 @@ export namespace Prisma {
     video_public_id?: true
     video_thumbnailUrl?: true
     video_duration?: true
+    transcription?: true
+    transcription_summary?: true
     sectionId?: true
     createdAt?: true
     updatedAt?: true
@@ -4263,6 +4271,8 @@ export namespace Prisma {
     video_public_id?: true
     video_thumbnailUrl?: true
     video_duration?: true
+    transcription?: true
+    transcription_summary?: true
     sectionId?: true
     createdAt?: true
     updatedAt?: true
@@ -4275,6 +4285,8 @@ export namespace Prisma {
     video_public_id?: true
     video_thumbnailUrl?: true
     video_duration?: true
+    transcription?: true
+    transcription_summary?: true
     sectionId?: true
     createdAt?: true
     updatedAt?: true
@@ -4374,6 +4386,8 @@ export namespace Prisma {
     video_public_id: string
     video_thumbnailUrl: string
     video_duration: number
+    transcription: string | null
+    transcription_summary: string | null
     sectionId: string
     createdAt: Date
     updatedAt: Date
@@ -4405,6 +4419,8 @@ export namespace Prisma {
     video_public_id?: boolean
     video_thumbnailUrl?: boolean
     video_duration?: boolean
+    transcription?: boolean
+    transcription_summary?: boolean
     sectionId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -4418,6 +4434,8 @@ export namespace Prisma {
     video_public_id?: boolean
     video_thumbnailUrl?: boolean
     video_duration?: boolean
+    transcription?: boolean
+    transcription_summary?: boolean
     sectionId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -4431,6 +4449,8 @@ export namespace Prisma {
     video_public_id?: boolean
     video_thumbnailUrl?: boolean
     video_duration?: boolean
+    transcription?: boolean
+    transcription_summary?: boolean
     sectionId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -4444,12 +4464,14 @@ export namespace Prisma {
     video_public_id?: boolean
     video_thumbnailUrl?: boolean
     video_duration?: boolean
+    transcription?: boolean
+    transcription_summary?: boolean
     sectionId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type VideoSectionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "video_title" | "video_url" | "video_public_id" | "video_thumbnailUrl" | "video_duration" | "sectionId" | "createdAt" | "updatedAt", ExtArgs["result"]["videoSection"]>
+  export type VideoSectionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "video_title" | "video_url" | "video_public_id" | "video_thumbnailUrl" | "video_duration" | "transcription" | "transcription_summary" | "sectionId" | "createdAt" | "updatedAt", ExtArgs["result"]["videoSection"]>
   export type VideoSectionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     section?: boolean | SectionDefaultArgs<ExtArgs>
   }
@@ -4472,6 +4494,8 @@ export namespace Prisma {
       video_public_id: string
       video_thumbnailUrl: string
       video_duration: number
+      transcription: string | null
+      transcription_summary: string | null
       sectionId: string
       createdAt: Date
       updatedAt: Date
@@ -4905,6 +4929,8 @@ export namespace Prisma {
     readonly video_public_id: FieldRef<"VideoSection", 'String'>
     readonly video_thumbnailUrl: FieldRef<"VideoSection", 'String'>
     readonly video_duration: FieldRef<"VideoSection", 'Float'>
+    readonly transcription: FieldRef<"VideoSection", 'String'>
+    readonly transcription_summary: FieldRef<"VideoSection", 'String'>
     readonly sectionId: FieldRef<"VideoSection", 'String'>
     readonly createdAt: FieldRef<"VideoSection", 'DateTime'>
     readonly updatedAt: FieldRef<"VideoSection", 'DateTime'>
@@ -13152,6 +13178,8 @@ export namespace Prisma {
     video_public_id: 'video_public_id',
     video_thumbnailUrl: 'video_thumbnailUrl',
     video_duration: 'video_duration',
+    transcription: 'transcription',
+    transcription_summary: 'transcription_summary',
     sectionId: 'sectionId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -13503,6 +13531,8 @@ export namespace Prisma {
     video_public_id?: StringFilter<"VideoSection"> | string
     video_thumbnailUrl?: StringFilter<"VideoSection"> | string
     video_duration?: FloatFilter<"VideoSection"> | number
+    transcription?: StringNullableFilter<"VideoSection"> | string | null
+    transcription_summary?: StringNullableFilter<"VideoSection"> | string | null
     sectionId?: StringFilter<"VideoSection"> | string
     createdAt?: DateTimeFilter<"VideoSection"> | Date | string
     updatedAt?: DateTimeFilter<"VideoSection"> | Date | string
@@ -13516,6 +13546,8 @@ export namespace Prisma {
     video_public_id?: SortOrder
     video_thumbnailUrl?: SortOrder
     video_duration?: SortOrder
+    transcription?: SortOrderInput | SortOrder
+    transcription_summary?: SortOrderInput | SortOrder
     sectionId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -13532,6 +13564,8 @@ export namespace Prisma {
     video_public_id?: StringFilter<"VideoSection"> | string
     video_thumbnailUrl?: StringFilter<"VideoSection"> | string
     video_duration?: FloatFilter<"VideoSection"> | number
+    transcription?: StringNullableFilter<"VideoSection"> | string | null
+    transcription_summary?: StringNullableFilter<"VideoSection"> | string | null
     sectionId?: StringFilter<"VideoSection"> | string
     createdAt?: DateTimeFilter<"VideoSection"> | Date | string
     updatedAt?: DateTimeFilter<"VideoSection"> | Date | string
@@ -13545,6 +13579,8 @@ export namespace Prisma {
     video_public_id?: SortOrder
     video_thumbnailUrl?: SortOrder
     video_duration?: SortOrder
+    transcription?: SortOrderInput | SortOrder
+    transcription_summary?: SortOrderInput | SortOrder
     sectionId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -13565,6 +13601,8 @@ export namespace Prisma {
     video_public_id?: StringWithAggregatesFilter<"VideoSection"> | string
     video_thumbnailUrl?: StringWithAggregatesFilter<"VideoSection"> | string
     video_duration?: FloatWithAggregatesFilter<"VideoSection"> | number
+    transcription?: StringNullableWithAggregatesFilter<"VideoSection"> | string | null
+    transcription_summary?: StringNullableWithAggregatesFilter<"VideoSection"> | string | null
     sectionId?: StringWithAggregatesFilter<"VideoSection"> | string
     createdAt?: DateTimeWithAggregatesFilter<"VideoSection"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"VideoSection"> | Date | string
@@ -14168,6 +14206,8 @@ export namespace Prisma {
     video_public_id: string
     video_thumbnailUrl: string
     video_duration: number
+    transcription?: string | null
+    transcription_summary?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     section: SectionCreateNestedOneWithoutVideoSectionInput
@@ -14180,6 +14220,8 @@ export namespace Prisma {
     video_public_id: string
     video_thumbnailUrl: string
     video_duration: number
+    transcription?: string | null
+    transcription_summary?: string | null
     sectionId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -14192,6 +14234,8 @@ export namespace Prisma {
     video_public_id?: StringFieldUpdateOperationsInput | string
     video_thumbnailUrl?: StringFieldUpdateOperationsInput | string
     video_duration?: FloatFieldUpdateOperationsInput | number
+    transcription?: NullableStringFieldUpdateOperationsInput | string | null
+    transcription_summary?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     section?: SectionUpdateOneRequiredWithoutVideoSectionNestedInput
@@ -14204,6 +14248,8 @@ export namespace Prisma {
     video_public_id?: StringFieldUpdateOperationsInput | string
     video_thumbnailUrl?: StringFieldUpdateOperationsInput | string
     video_duration?: FloatFieldUpdateOperationsInput | number
+    transcription?: NullableStringFieldUpdateOperationsInput | string | null
+    transcription_summary?: NullableStringFieldUpdateOperationsInput | string | null
     sectionId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14216,6 +14262,8 @@ export namespace Prisma {
     video_public_id: string
     video_thumbnailUrl: string
     video_duration: number
+    transcription?: string | null
+    transcription_summary?: string | null
     sectionId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -14228,6 +14276,8 @@ export namespace Prisma {
     video_public_id?: StringFieldUpdateOperationsInput | string
     video_thumbnailUrl?: StringFieldUpdateOperationsInput | string
     video_duration?: FloatFieldUpdateOperationsInput | number
+    transcription?: NullableStringFieldUpdateOperationsInput | string | null
+    transcription_summary?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14239,6 +14289,8 @@ export namespace Prisma {
     video_public_id?: StringFieldUpdateOperationsInput | string
     video_thumbnailUrl?: StringFieldUpdateOperationsInput | string
     video_duration?: FloatFieldUpdateOperationsInput | number
+    transcription?: NullableStringFieldUpdateOperationsInput | string | null
+    transcription_summary?: NullableStringFieldUpdateOperationsInput | string | null
     sectionId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14936,6 +14988,8 @@ export namespace Prisma {
     video_public_id?: SortOrder
     video_thumbnailUrl?: SortOrder
     video_duration?: SortOrder
+    transcription?: SortOrder
+    transcription_summary?: SortOrder
     sectionId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -14952,6 +15006,8 @@ export namespace Prisma {
     video_public_id?: SortOrder
     video_thumbnailUrl?: SortOrder
     video_duration?: SortOrder
+    transcription?: SortOrder
+    transcription_summary?: SortOrder
     sectionId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -14964,6 +15020,8 @@ export namespace Prisma {
     video_public_id?: SortOrder
     video_thumbnailUrl?: SortOrder
     video_duration?: SortOrder
+    transcription?: SortOrder
+    transcription_summary?: SortOrder
     sectionId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -16221,6 +16279,8 @@ export namespace Prisma {
     video_public_id: string
     video_thumbnailUrl: string
     video_duration: number
+    transcription?: string | null
+    transcription_summary?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -16232,6 +16292,8 @@ export namespace Prisma {
     video_public_id: string
     video_thumbnailUrl: string
     video_duration: number
+    transcription?: string | null
+    transcription_summary?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -16311,6 +16373,8 @@ export namespace Prisma {
     video_public_id?: StringFilter<"VideoSection"> | string
     video_thumbnailUrl?: StringFilter<"VideoSection"> | string
     video_duration?: FloatFilter<"VideoSection"> | number
+    transcription?: StringNullableFilter<"VideoSection"> | string | null
+    transcription_summary?: StringNullableFilter<"VideoSection"> | string | null
     sectionId?: StringFilter<"VideoSection"> | string
     createdAt?: DateTimeFilter<"VideoSection"> | Date | string
     updatedAt?: DateTimeFilter<"VideoSection"> | Date | string
@@ -17047,6 +17111,8 @@ export namespace Prisma {
     video_public_id: string
     video_thumbnailUrl: string
     video_duration: number
+    transcription?: string | null
+    transcription_summary?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -17058,6 +17124,8 @@ export namespace Prisma {
     video_public_id?: StringFieldUpdateOperationsInput | string
     video_thumbnailUrl?: StringFieldUpdateOperationsInput | string
     video_duration?: FloatFieldUpdateOperationsInput | number
+    transcription?: NullableStringFieldUpdateOperationsInput | string | null
+    transcription_summary?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17069,6 +17137,8 @@ export namespace Prisma {
     video_public_id?: StringFieldUpdateOperationsInput | string
     video_thumbnailUrl?: StringFieldUpdateOperationsInput | string
     video_duration?: FloatFieldUpdateOperationsInput | number
+    transcription?: NullableStringFieldUpdateOperationsInput | string | null
+    transcription_summary?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -17080,6 +17150,8 @@ export namespace Prisma {
     video_public_id?: StringFieldUpdateOperationsInput | string
     video_thumbnailUrl?: StringFieldUpdateOperationsInput | string
     video_duration?: FloatFieldUpdateOperationsInput | number
+    transcription?: NullableStringFieldUpdateOperationsInput | string | null
+    transcription_summary?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

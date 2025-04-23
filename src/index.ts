@@ -9,6 +9,8 @@ import userRoute from "./routes/userRoute";
 import paymentRoute from "./routes/paymentRoute";
 import filterRoute from "./routes/filterRoute";
 import { checkConnection, createIndex } from "./lib/elasticClient";
+import chatRoute from "./routes/chatRoute";
+import videoTranscriptRoute from "./routes/videoTranscriptRoute";
 
 dotenv.config();
 
@@ -34,20 +36,8 @@ app.use("/api/course", courseRoute);
 app.use("/api/updateuserdata", userRoute);
 app.use("/api/payment", paymentRoute);
 app.use("/api/advancedFilter", filterRoute);
-
-// app.get("/protected", requireAuth(), async (req, res) => {
-//   // Use `getAuth()` to get the user's `userId`
-//   const { userId } = getAuth(req);
-
-//   // Use Clerk's JavaScript Backend SDK to get the user's User object
-//   if (!userId) res.json({ data: null, message: "There is no user loggedIn" });
-
-//   const user = await clerkClient.users.getUser(userId as string);
-
-//   res.json({ data: user, message: "User Data retrieved" });
-// });
-
-// Test connection
+app.use("/api/chat", chatRoute);
+app.use("/api/video/transcript", videoTranscriptRoute);
 
 (async function () {
   const isConnected = await checkConnection();

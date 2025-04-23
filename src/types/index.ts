@@ -37,3 +37,39 @@ export type section = {
     video_duration: number;
   }[];
 }[];
+
+export type CreatedCourseDataType = {
+  id: string;
+  owner: string;
+  ownerName: string;
+  title: string;
+  description: string;
+  price: number;
+  main_image: string;
+  createdAt: Date;
+  updatedAt: Date;
+  rating: {
+    value: number;
+  }[];
+  enrolledStudents: {
+    id: string;
+  }[];
+  section: {
+    id: string;
+    sectionName: string;
+    courseId: string;
+    createdAt: Date;
+    updatedAt: Date;
+    videoSection: {
+      id: string;
+      video_title: string;
+      video_url: string;
+      video_public_id: string;
+      video_thumbnailUrl: string;
+      video_duration: number;
+      sectionId: string;
+      createdAt: Date;
+      updatedAt: Date;
+    }[];
+  }[];
+};
