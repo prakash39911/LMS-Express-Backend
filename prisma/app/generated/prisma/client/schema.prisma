@@ -46,7 +46,6 @@ model VideoSection {
   video_public_id       String
   video_thumbnailUrl    String
   video_duration        Float
-  transcription         String?
   transcription_summary String?
   sectionId             String
   section               Section  @relation(fields: [sectionId], references: [id], onDelete: Cascade)
@@ -124,6 +123,12 @@ model SavedFilterData {
   priceRange     Int[]
   FilterPresetId String
   FilterPreset   FilterPreset @relation(fields: [FilterPresetId], references: [id], onDelete: Cascade)
+}
+
+model VideoTranscription {
+  id                 String @id @default(cuid())
+  video_publicID     String
+  transcription_data String
 }
 
 enum payment_status {

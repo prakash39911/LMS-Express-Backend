@@ -6,6 +6,7 @@ import { fileURLToPath } from "url";
 import fetch from "node-fetch";
 import { geminiClient } from "../lib/GeminiApi";
 import prisma from "../lib/prisma";
+import { getAuth } from "@clerk/express";
 
 export async function deleteFromCloudinary(req: Request, res: Response) {
   try {
@@ -82,24 +83,145 @@ export async function handlecloudinaryWebhookForTranscription(
       contents: prompt,
     });
 
+    if (!response) {
+      console.error("Error getiing gemini response");
+      return;
+    }
+
     console.log("gemini response from the given INPUT: -----", response.text);
 
-    // const videoSection = await prisma.videoSection.findFirst({
-    //   where: {
-    //     video_public_id: payload?.public_id,
-    //   },
-    // });
-
-    // const updateVideoSection = await prisma.videoSection.update({
-    //   where: {
-    //     id: videoSection?.id,
-    //   },
-    //   data: {
-    //     transcription: response.text,
-    //     transcription_summary: "",
-    //   },
-    // });
+    const createEntryInDB = await prisma.videoTranscription.create({
+      data: {
+        video_publicID: payload?.public_id,
+        transcription_data: response.text || "",
+      },
+    });
 
     res.status(200).send("Webhook received");
+  }
+}
+
+export async function handleGenerateSummary(req: Request, res: Response) {
+  const { userId } = getAuth(req);
+
+  if (!userId) {
+    throw new Error("No Logged in user");
+  }
+
+  try {
+    const { videoPublicId: VideoPublicID } = req.body;
+
+    if (!VideoPublicID) {
+      res.status(400).json({ status: false, message: "Insuffecient Info" });
+      return;
+    }
+
+    const transcriptionData = await prisma.videoTranscription.findFirst({
+      where: {
+        video_publicID: VideoPublicID,
+      },
+    });
+
+    if (!transcriptionData) {
+      res.status(400).json({ status: false, message: "No data Found" });
+      return;
+    }
+
+    const prompt = `
+    Generate Summary by analysing the text in depth and summary should include all the important points and arranged properly using paragraph, bullet points using HTML tags.
+
+    context: 
+    ${transcriptionData?.transcription_data}
+    `;
+
+    const summary = await geminiClient.models.generateContent({
+      model: "gemini-2.0-flash",
+      contents: prompt,
+    });
+
+    res.status(200).json({
+      status: true,
+      data: summary.text,
+      message: "Summary generated successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ status: false, message: "Internal Server Error" });
+  }
+}
+
+export async function handleGetTranscriptionSummary(
+  req: Request,
+  res: Response
+) {
+  const { userId } = getAuth(req);
+
+  if (!userId) {
+    res.status(400).json({ status: false, message: "You are not logged In" });
+    return;
+  }
+  try {
+    const { VideoPublicID } = req.body;
+
+    if (!VideoPublicID) {
+      res.status(400).json({ status: false, message: "Insufficient Data" });
+      return;
+    }
+
+    const summary = await prisma.videoSection.findFirst({
+      where: {
+        video_public_id: VideoPublicID,
+      },
+      select: {
+        transcription_summary: true,
+      },
+    });
+
+    if (!summary) {
+      res.status(400).json({ status: false, message: "Data not found" });
+    }
+
+    res.status(200).json({
+      status: true,
+      data: summary?.transcription_summary,
+      message: "Data fetched Successfully",
+    });
+  } catch (error) {
+    res.status(500).json({ status: false, message: "Internal Server Error" });
+  }
+}
+
+export async function handleSaveTranscriptionSummary(
+  req: Request,
+  res: Response
+) {
+  try {
+    const { summary, videoPublicId } = req.body;
+
+    if (!summary) {
+      res.status(400).json({ status: false, message: "Insufficient Data" });
+      return;
+    }
+
+    const videoSection = await prisma.videoSection.findFirst({
+      where: {
+        video_public_id: videoPublicId,
+      },
+    });
+
+    if (!videoSection) {
+      res.status(400).json({ status: false, message: "Data not Found" });
+    }
+
+    await prisma.videoSection.update({
+      where: { id: videoSection?.id },
+      data: {
+        transcription_summary: summary,
+      },
+    });
+
+    res.status(200).json({ status: true, message: "DB Updated Successfully" });
+  } catch (error) {
+    res.status(500).json({ status: false, message: "Internal Server Error" });
   }
 }

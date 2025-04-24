@@ -63,6 +63,11 @@ export type FilterPreset = $Result.DefaultSelection<Prisma.$FilterPresetPayload>
  * 
  */
 export type SavedFilterData = $Result.DefaultSelection<Prisma.$SavedFilterDataPayload>
+/**
+ * Model VideoTranscription
+ * 
+ */
+export type VideoTranscription = $Result.DefaultSelection<Prisma.$VideoTranscriptionPayload>
 
 /**
  * Enums
@@ -306,6 +311,16 @@ export class PrismaClient<
     * ```
     */
   get savedFilterData(): Prisma.SavedFilterDataDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.videoTranscription`: Exposes CRUD operations for the **VideoTranscription** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more VideoTranscriptions
+    * const videoTranscriptions = await prisma.videoTranscription.findMany()
+    * ```
+    */
+  get videoTranscription(): Prisma.VideoTranscriptionDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -755,7 +770,8 @@ export namespace Prisma {
     SectionProgress: 'SectionProgress',
     VideoProgress: 'VideoProgress',
     FilterPreset: 'FilterPreset',
-    SavedFilterData: 'SavedFilterData'
+    SavedFilterData: 'SavedFilterData',
+    VideoTranscription: 'VideoTranscription'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -774,7 +790,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "course" | "section" | "videoSection" | "rating" | "enrolledStudents" | "courseProgress" | "sectionProgress" | "videoProgress" | "filterPreset" | "savedFilterData"
+      modelProps: "course" | "section" | "videoSection" | "rating" | "enrolledStudents" | "courseProgress" | "sectionProgress" | "videoProgress" | "filterPreset" | "savedFilterData" | "videoTranscription"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1518,6 +1534,80 @@ export namespace Prisma {
           }
         }
       }
+      VideoTranscription: {
+        payload: Prisma.$VideoTranscriptionPayload<ExtArgs>
+        fields: Prisma.VideoTranscriptionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.VideoTranscriptionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VideoTranscriptionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.VideoTranscriptionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VideoTranscriptionPayload>
+          }
+          findFirst: {
+            args: Prisma.VideoTranscriptionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VideoTranscriptionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.VideoTranscriptionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VideoTranscriptionPayload>
+          }
+          findMany: {
+            args: Prisma.VideoTranscriptionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VideoTranscriptionPayload>[]
+          }
+          create: {
+            args: Prisma.VideoTranscriptionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VideoTranscriptionPayload>
+          }
+          createMany: {
+            args: Prisma.VideoTranscriptionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.VideoTranscriptionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VideoTranscriptionPayload>[]
+          }
+          delete: {
+            args: Prisma.VideoTranscriptionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VideoTranscriptionPayload>
+          }
+          update: {
+            args: Prisma.VideoTranscriptionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VideoTranscriptionPayload>
+          }
+          deleteMany: {
+            args: Prisma.VideoTranscriptionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.VideoTranscriptionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.VideoTranscriptionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VideoTranscriptionPayload>[]
+          }
+          upsert: {
+            args: Prisma.VideoTranscriptionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VideoTranscriptionPayload>
+          }
+          aggregate: {
+            args: Prisma.VideoTranscriptionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateVideoTranscription>
+          }
+          groupBy: {
+            args: Prisma.VideoTranscriptionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<VideoTranscriptionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.VideoTranscriptionCountArgs<ExtArgs>
+            result: $Utils.Optional<VideoTranscriptionCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1612,6 +1702,7 @@ export namespace Prisma {
     videoProgress?: VideoProgressOmit
     filterPreset?: FilterPresetOmit
     savedFilterData?: SavedFilterDataOmit
+    videoTranscription?: VideoTranscriptionOmit
   }
 
   /* Types for Logging */
@@ -4205,7 +4296,6 @@ export namespace Prisma {
     video_public_id: string | null
     video_thumbnailUrl: string | null
     video_duration: number | null
-    transcription: string | null
     transcription_summary: string | null
     sectionId: string | null
     createdAt: Date | null
@@ -4219,7 +4309,6 @@ export namespace Prisma {
     video_public_id: string | null
     video_thumbnailUrl: string | null
     video_duration: number | null
-    transcription: string | null
     transcription_summary: string | null
     sectionId: string | null
     createdAt: Date | null
@@ -4233,7 +4322,6 @@ export namespace Prisma {
     video_public_id: number
     video_thumbnailUrl: number
     video_duration: number
-    transcription: number
     transcription_summary: number
     sectionId: number
     createdAt: number
@@ -4257,7 +4345,6 @@ export namespace Prisma {
     video_public_id?: true
     video_thumbnailUrl?: true
     video_duration?: true
-    transcription?: true
     transcription_summary?: true
     sectionId?: true
     createdAt?: true
@@ -4271,7 +4358,6 @@ export namespace Prisma {
     video_public_id?: true
     video_thumbnailUrl?: true
     video_duration?: true
-    transcription?: true
     transcription_summary?: true
     sectionId?: true
     createdAt?: true
@@ -4285,7 +4371,6 @@ export namespace Prisma {
     video_public_id?: true
     video_thumbnailUrl?: true
     video_duration?: true
-    transcription?: true
     transcription_summary?: true
     sectionId?: true
     createdAt?: true
@@ -4386,7 +4471,6 @@ export namespace Prisma {
     video_public_id: string
     video_thumbnailUrl: string
     video_duration: number
-    transcription: string | null
     transcription_summary: string | null
     sectionId: string
     createdAt: Date
@@ -4419,7 +4503,6 @@ export namespace Prisma {
     video_public_id?: boolean
     video_thumbnailUrl?: boolean
     video_duration?: boolean
-    transcription?: boolean
     transcription_summary?: boolean
     sectionId?: boolean
     createdAt?: boolean
@@ -4434,7 +4517,6 @@ export namespace Prisma {
     video_public_id?: boolean
     video_thumbnailUrl?: boolean
     video_duration?: boolean
-    transcription?: boolean
     transcription_summary?: boolean
     sectionId?: boolean
     createdAt?: boolean
@@ -4449,7 +4531,6 @@ export namespace Prisma {
     video_public_id?: boolean
     video_thumbnailUrl?: boolean
     video_duration?: boolean
-    transcription?: boolean
     transcription_summary?: boolean
     sectionId?: boolean
     createdAt?: boolean
@@ -4464,14 +4545,13 @@ export namespace Prisma {
     video_public_id?: boolean
     video_thumbnailUrl?: boolean
     video_duration?: boolean
-    transcription?: boolean
     transcription_summary?: boolean
     sectionId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type VideoSectionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "video_title" | "video_url" | "video_public_id" | "video_thumbnailUrl" | "video_duration" | "transcription" | "transcription_summary" | "sectionId" | "createdAt" | "updatedAt", ExtArgs["result"]["videoSection"]>
+  export type VideoSectionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "video_title" | "video_url" | "video_public_id" | "video_thumbnailUrl" | "video_duration" | "transcription_summary" | "sectionId" | "createdAt" | "updatedAt", ExtArgs["result"]["videoSection"]>
   export type VideoSectionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     section?: boolean | SectionDefaultArgs<ExtArgs>
   }
@@ -4494,7 +4574,6 @@ export namespace Prisma {
       video_public_id: string
       video_thumbnailUrl: string
       video_duration: number
-      transcription: string | null
       transcription_summary: string | null
       sectionId: string
       createdAt: Date
@@ -4929,7 +5008,6 @@ export namespace Prisma {
     readonly video_public_id: FieldRef<"VideoSection", 'String'>
     readonly video_thumbnailUrl: FieldRef<"VideoSection", 'String'>
     readonly video_duration: FieldRef<"VideoSection", 'Float'>
-    readonly transcription: FieldRef<"VideoSection", 'String'>
     readonly transcription_summary: FieldRef<"VideoSection", 'String'>
     readonly sectionId: FieldRef<"VideoSection", 'String'>
     readonly createdAt: FieldRef<"VideoSection", 'DateTime'>
@@ -13132,6 +13210,975 @@ export namespace Prisma {
 
 
   /**
+   * Model VideoTranscription
+   */
+
+  export type AggregateVideoTranscription = {
+    _count: VideoTranscriptionCountAggregateOutputType | null
+    _min: VideoTranscriptionMinAggregateOutputType | null
+    _max: VideoTranscriptionMaxAggregateOutputType | null
+  }
+
+  export type VideoTranscriptionMinAggregateOutputType = {
+    id: string | null
+    video_publicID: string | null
+    transcription_data: string | null
+  }
+
+  export type VideoTranscriptionMaxAggregateOutputType = {
+    id: string | null
+    video_publicID: string | null
+    transcription_data: string | null
+  }
+
+  export type VideoTranscriptionCountAggregateOutputType = {
+    id: number
+    video_publicID: number
+    transcription_data: number
+    _all: number
+  }
+
+
+  export type VideoTranscriptionMinAggregateInputType = {
+    id?: true
+    video_publicID?: true
+    transcription_data?: true
+  }
+
+  export type VideoTranscriptionMaxAggregateInputType = {
+    id?: true
+    video_publicID?: true
+    transcription_data?: true
+  }
+
+  export type VideoTranscriptionCountAggregateInputType = {
+    id?: true
+    video_publicID?: true
+    transcription_data?: true
+    _all?: true
+  }
+
+  export type VideoTranscriptionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which VideoTranscription to aggregate.
+     */
+    where?: VideoTranscriptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VideoTranscriptions to fetch.
+     */
+    orderBy?: VideoTranscriptionOrderByWithRelationInput | VideoTranscriptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: VideoTranscriptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VideoTranscriptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VideoTranscriptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned VideoTranscriptions
+    **/
+    _count?: true | VideoTranscriptionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: VideoTranscriptionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: VideoTranscriptionMaxAggregateInputType
+  }
+
+  export type GetVideoTranscriptionAggregateType<T extends VideoTranscriptionAggregateArgs> = {
+        [P in keyof T & keyof AggregateVideoTranscription]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateVideoTranscription[P]>
+      : GetScalarType<T[P], AggregateVideoTranscription[P]>
+  }
+
+
+
+
+  export type VideoTranscriptionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: VideoTranscriptionWhereInput
+    orderBy?: VideoTranscriptionOrderByWithAggregationInput | VideoTranscriptionOrderByWithAggregationInput[]
+    by: VideoTranscriptionScalarFieldEnum[] | VideoTranscriptionScalarFieldEnum
+    having?: VideoTranscriptionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: VideoTranscriptionCountAggregateInputType | true
+    _min?: VideoTranscriptionMinAggregateInputType
+    _max?: VideoTranscriptionMaxAggregateInputType
+  }
+
+  export type VideoTranscriptionGroupByOutputType = {
+    id: string
+    video_publicID: string
+    transcription_data: string
+    _count: VideoTranscriptionCountAggregateOutputType | null
+    _min: VideoTranscriptionMinAggregateOutputType | null
+    _max: VideoTranscriptionMaxAggregateOutputType | null
+  }
+
+  type GetVideoTranscriptionGroupByPayload<T extends VideoTranscriptionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<VideoTranscriptionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof VideoTranscriptionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], VideoTranscriptionGroupByOutputType[P]>
+            : GetScalarType<T[P], VideoTranscriptionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type VideoTranscriptionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    video_publicID?: boolean
+    transcription_data?: boolean
+  }, ExtArgs["result"]["videoTranscription"]>
+
+  export type VideoTranscriptionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    video_publicID?: boolean
+    transcription_data?: boolean
+  }, ExtArgs["result"]["videoTranscription"]>
+
+  export type VideoTranscriptionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    video_publicID?: boolean
+    transcription_data?: boolean
+  }, ExtArgs["result"]["videoTranscription"]>
+
+  export type VideoTranscriptionSelectScalar = {
+    id?: boolean
+    video_publicID?: boolean
+    transcription_data?: boolean
+  }
+
+  export type VideoTranscriptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "video_publicID" | "transcription_data", ExtArgs["result"]["videoTranscription"]>
+
+  export type $VideoTranscriptionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "VideoTranscription"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      video_publicID: string
+      transcription_data: string
+    }, ExtArgs["result"]["videoTranscription"]>
+    composites: {}
+  }
+
+  type VideoTranscriptionGetPayload<S extends boolean | null | undefined | VideoTranscriptionDefaultArgs> = $Result.GetResult<Prisma.$VideoTranscriptionPayload, S>
+
+  type VideoTranscriptionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<VideoTranscriptionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: VideoTranscriptionCountAggregateInputType | true
+    }
+
+  export interface VideoTranscriptionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['VideoTranscription'], meta: { name: 'VideoTranscription' } }
+    /**
+     * Find zero or one VideoTranscription that matches the filter.
+     * @param {VideoTranscriptionFindUniqueArgs} args - Arguments to find a VideoTranscription
+     * @example
+     * // Get one VideoTranscription
+     * const videoTranscription = await prisma.videoTranscription.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends VideoTranscriptionFindUniqueArgs>(args: SelectSubset<T, VideoTranscriptionFindUniqueArgs<ExtArgs>>): Prisma__VideoTranscriptionClient<$Result.GetResult<Prisma.$VideoTranscriptionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one VideoTranscription that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {VideoTranscriptionFindUniqueOrThrowArgs} args - Arguments to find a VideoTranscription
+     * @example
+     * // Get one VideoTranscription
+     * const videoTranscription = await prisma.videoTranscription.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends VideoTranscriptionFindUniqueOrThrowArgs>(args: SelectSubset<T, VideoTranscriptionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__VideoTranscriptionClient<$Result.GetResult<Prisma.$VideoTranscriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first VideoTranscription that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VideoTranscriptionFindFirstArgs} args - Arguments to find a VideoTranscription
+     * @example
+     * // Get one VideoTranscription
+     * const videoTranscription = await prisma.videoTranscription.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends VideoTranscriptionFindFirstArgs>(args?: SelectSubset<T, VideoTranscriptionFindFirstArgs<ExtArgs>>): Prisma__VideoTranscriptionClient<$Result.GetResult<Prisma.$VideoTranscriptionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first VideoTranscription that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VideoTranscriptionFindFirstOrThrowArgs} args - Arguments to find a VideoTranscription
+     * @example
+     * // Get one VideoTranscription
+     * const videoTranscription = await prisma.videoTranscription.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends VideoTranscriptionFindFirstOrThrowArgs>(args?: SelectSubset<T, VideoTranscriptionFindFirstOrThrowArgs<ExtArgs>>): Prisma__VideoTranscriptionClient<$Result.GetResult<Prisma.$VideoTranscriptionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more VideoTranscriptions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VideoTranscriptionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all VideoTranscriptions
+     * const videoTranscriptions = await prisma.videoTranscription.findMany()
+     * 
+     * // Get first 10 VideoTranscriptions
+     * const videoTranscriptions = await prisma.videoTranscription.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const videoTranscriptionWithIdOnly = await prisma.videoTranscription.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends VideoTranscriptionFindManyArgs>(args?: SelectSubset<T, VideoTranscriptionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VideoTranscriptionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a VideoTranscription.
+     * @param {VideoTranscriptionCreateArgs} args - Arguments to create a VideoTranscription.
+     * @example
+     * // Create one VideoTranscription
+     * const VideoTranscription = await prisma.videoTranscription.create({
+     *   data: {
+     *     // ... data to create a VideoTranscription
+     *   }
+     * })
+     * 
+     */
+    create<T extends VideoTranscriptionCreateArgs>(args: SelectSubset<T, VideoTranscriptionCreateArgs<ExtArgs>>): Prisma__VideoTranscriptionClient<$Result.GetResult<Prisma.$VideoTranscriptionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many VideoTranscriptions.
+     * @param {VideoTranscriptionCreateManyArgs} args - Arguments to create many VideoTranscriptions.
+     * @example
+     * // Create many VideoTranscriptions
+     * const videoTranscription = await prisma.videoTranscription.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends VideoTranscriptionCreateManyArgs>(args?: SelectSubset<T, VideoTranscriptionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many VideoTranscriptions and returns the data saved in the database.
+     * @param {VideoTranscriptionCreateManyAndReturnArgs} args - Arguments to create many VideoTranscriptions.
+     * @example
+     * // Create many VideoTranscriptions
+     * const videoTranscription = await prisma.videoTranscription.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many VideoTranscriptions and only return the `id`
+     * const videoTranscriptionWithIdOnly = await prisma.videoTranscription.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends VideoTranscriptionCreateManyAndReturnArgs>(args?: SelectSubset<T, VideoTranscriptionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VideoTranscriptionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a VideoTranscription.
+     * @param {VideoTranscriptionDeleteArgs} args - Arguments to delete one VideoTranscription.
+     * @example
+     * // Delete one VideoTranscription
+     * const VideoTranscription = await prisma.videoTranscription.delete({
+     *   where: {
+     *     // ... filter to delete one VideoTranscription
+     *   }
+     * })
+     * 
+     */
+    delete<T extends VideoTranscriptionDeleteArgs>(args: SelectSubset<T, VideoTranscriptionDeleteArgs<ExtArgs>>): Prisma__VideoTranscriptionClient<$Result.GetResult<Prisma.$VideoTranscriptionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one VideoTranscription.
+     * @param {VideoTranscriptionUpdateArgs} args - Arguments to update one VideoTranscription.
+     * @example
+     * // Update one VideoTranscription
+     * const videoTranscription = await prisma.videoTranscription.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends VideoTranscriptionUpdateArgs>(args: SelectSubset<T, VideoTranscriptionUpdateArgs<ExtArgs>>): Prisma__VideoTranscriptionClient<$Result.GetResult<Prisma.$VideoTranscriptionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more VideoTranscriptions.
+     * @param {VideoTranscriptionDeleteManyArgs} args - Arguments to filter VideoTranscriptions to delete.
+     * @example
+     * // Delete a few VideoTranscriptions
+     * const { count } = await prisma.videoTranscription.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends VideoTranscriptionDeleteManyArgs>(args?: SelectSubset<T, VideoTranscriptionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more VideoTranscriptions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VideoTranscriptionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many VideoTranscriptions
+     * const videoTranscription = await prisma.videoTranscription.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends VideoTranscriptionUpdateManyArgs>(args: SelectSubset<T, VideoTranscriptionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more VideoTranscriptions and returns the data updated in the database.
+     * @param {VideoTranscriptionUpdateManyAndReturnArgs} args - Arguments to update many VideoTranscriptions.
+     * @example
+     * // Update many VideoTranscriptions
+     * const videoTranscription = await prisma.videoTranscription.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more VideoTranscriptions and only return the `id`
+     * const videoTranscriptionWithIdOnly = await prisma.videoTranscription.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends VideoTranscriptionUpdateManyAndReturnArgs>(args: SelectSubset<T, VideoTranscriptionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VideoTranscriptionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one VideoTranscription.
+     * @param {VideoTranscriptionUpsertArgs} args - Arguments to update or create a VideoTranscription.
+     * @example
+     * // Update or create a VideoTranscription
+     * const videoTranscription = await prisma.videoTranscription.upsert({
+     *   create: {
+     *     // ... data to create a VideoTranscription
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the VideoTranscription we want to update
+     *   }
+     * })
+     */
+    upsert<T extends VideoTranscriptionUpsertArgs>(args: SelectSubset<T, VideoTranscriptionUpsertArgs<ExtArgs>>): Prisma__VideoTranscriptionClient<$Result.GetResult<Prisma.$VideoTranscriptionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of VideoTranscriptions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VideoTranscriptionCountArgs} args - Arguments to filter VideoTranscriptions to count.
+     * @example
+     * // Count the number of VideoTranscriptions
+     * const count = await prisma.videoTranscription.count({
+     *   where: {
+     *     // ... the filter for the VideoTranscriptions we want to count
+     *   }
+     * })
+    **/
+    count<T extends VideoTranscriptionCountArgs>(
+      args?: Subset<T, VideoTranscriptionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], VideoTranscriptionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a VideoTranscription.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VideoTranscriptionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends VideoTranscriptionAggregateArgs>(args: Subset<T, VideoTranscriptionAggregateArgs>): Prisma.PrismaPromise<GetVideoTranscriptionAggregateType<T>>
+
+    /**
+     * Group by VideoTranscription.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VideoTranscriptionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends VideoTranscriptionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: VideoTranscriptionGroupByArgs['orderBy'] }
+        : { orderBy?: VideoTranscriptionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, VideoTranscriptionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetVideoTranscriptionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the VideoTranscription model
+   */
+  readonly fields: VideoTranscriptionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for VideoTranscription.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__VideoTranscriptionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the VideoTranscription model
+   */
+  interface VideoTranscriptionFieldRefs {
+    readonly id: FieldRef<"VideoTranscription", 'String'>
+    readonly video_publicID: FieldRef<"VideoTranscription", 'String'>
+    readonly transcription_data: FieldRef<"VideoTranscription", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * VideoTranscription findUnique
+   */
+  export type VideoTranscriptionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VideoTranscription
+     */
+    select?: VideoTranscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VideoTranscription
+     */
+    omit?: VideoTranscriptionOmit<ExtArgs> | null
+    /**
+     * Filter, which VideoTranscription to fetch.
+     */
+    where: VideoTranscriptionWhereUniqueInput
+  }
+
+  /**
+   * VideoTranscription findUniqueOrThrow
+   */
+  export type VideoTranscriptionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VideoTranscription
+     */
+    select?: VideoTranscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VideoTranscription
+     */
+    omit?: VideoTranscriptionOmit<ExtArgs> | null
+    /**
+     * Filter, which VideoTranscription to fetch.
+     */
+    where: VideoTranscriptionWhereUniqueInput
+  }
+
+  /**
+   * VideoTranscription findFirst
+   */
+  export type VideoTranscriptionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VideoTranscription
+     */
+    select?: VideoTranscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VideoTranscription
+     */
+    omit?: VideoTranscriptionOmit<ExtArgs> | null
+    /**
+     * Filter, which VideoTranscription to fetch.
+     */
+    where?: VideoTranscriptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VideoTranscriptions to fetch.
+     */
+    orderBy?: VideoTranscriptionOrderByWithRelationInput | VideoTranscriptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for VideoTranscriptions.
+     */
+    cursor?: VideoTranscriptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VideoTranscriptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VideoTranscriptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of VideoTranscriptions.
+     */
+    distinct?: VideoTranscriptionScalarFieldEnum | VideoTranscriptionScalarFieldEnum[]
+  }
+
+  /**
+   * VideoTranscription findFirstOrThrow
+   */
+  export type VideoTranscriptionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VideoTranscription
+     */
+    select?: VideoTranscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VideoTranscription
+     */
+    omit?: VideoTranscriptionOmit<ExtArgs> | null
+    /**
+     * Filter, which VideoTranscription to fetch.
+     */
+    where?: VideoTranscriptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VideoTranscriptions to fetch.
+     */
+    orderBy?: VideoTranscriptionOrderByWithRelationInput | VideoTranscriptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for VideoTranscriptions.
+     */
+    cursor?: VideoTranscriptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VideoTranscriptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VideoTranscriptions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of VideoTranscriptions.
+     */
+    distinct?: VideoTranscriptionScalarFieldEnum | VideoTranscriptionScalarFieldEnum[]
+  }
+
+  /**
+   * VideoTranscription findMany
+   */
+  export type VideoTranscriptionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VideoTranscription
+     */
+    select?: VideoTranscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VideoTranscription
+     */
+    omit?: VideoTranscriptionOmit<ExtArgs> | null
+    /**
+     * Filter, which VideoTranscriptions to fetch.
+     */
+    where?: VideoTranscriptionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of VideoTranscriptions to fetch.
+     */
+    orderBy?: VideoTranscriptionOrderByWithRelationInput | VideoTranscriptionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing VideoTranscriptions.
+     */
+    cursor?: VideoTranscriptionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` VideoTranscriptions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` VideoTranscriptions.
+     */
+    skip?: number
+    distinct?: VideoTranscriptionScalarFieldEnum | VideoTranscriptionScalarFieldEnum[]
+  }
+
+  /**
+   * VideoTranscription create
+   */
+  export type VideoTranscriptionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VideoTranscription
+     */
+    select?: VideoTranscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VideoTranscription
+     */
+    omit?: VideoTranscriptionOmit<ExtArgs> | null
+    /**
+     * The data needed to create a VideoTranscription.
+     */
+    data: XOR<VideoTranscriptionCreateInput, VideoTranscriptionUncheckedCreateInput>
+  }
+
+  /**
+   * VideoTranscription createMany
+   */
+  export type VideoTranscriptionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many VideoTranscriptions.
+     */
+    data: VideoTranscriptionCreateManyInput | VideoTranscriptionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * VideoTranscription createManyAndReturn
+   */
+  export type VideoTranscriptionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VideoTranscription
+     */
+    select?: VideoTranscriptionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the VideoTranscription
+     */
+    omit?: VideoTranscriptionOmit<ExtArgs> | null
+    /**
+     * The data used to create many VideoTranscriptions.
+     */
+    data: VideoTranscriptionCreateManyInput | VideoTranscriptionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * VideoTranscription update
+   */
+  export type VideoTranscriptionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VideoTranscription
+     */
+    select?: VideoTranscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VideoTranscription
+     */
+    omit?: VideoTranscriptionOmit<ExtArgs> | null
+    /**
+     * The data needed to update a VideoTranscription.
+     */
+    data: XOR<VideoTranscriptionUpdateInput, VideoTranscriptionUncheckedUpdateInput>
+    /**
+     * Choose, which VideoTranscription to update.
+     */
+    where: VideoTranscriptionWhereUniqueInput
+  }
+
+  /**
+   * VideoTranscription updateMany
+   */
+  export type VideoTranscriptionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update VideoTranscriptions.
+     */
+    data: XOR<VideoTranscriptionUpdateManyMutationInput, VideoTranscriptionUncheckedUpdateManyInput>
+    /**
+     * Filter which VideoTranscriptions to update
+     */
+    where?: VideoTranscriptionWhereInput
+    /**
+     * Limit how many VideoTranscriptions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * VideoTranscription updateManyAndReturn
+   */
+  export type VideoTranscriptionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VideoTranscription
+     */
+    select?: VideoTranscriptionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the VideoTranscription
+     */
+    omit?: VideoTranscriptionOmit<ExtArgs> | null
+    /**
+     * The data used to update VideoTranscriptions.
+     */
+    data: XOR<VideoTranscriptionUpdateManyMutationInput, VideoTranscriptionUncheckedUpdateManyInput>
+    /**
+     * Filter which VideoTranscriptions to update
+     */
+    where?: VideoTranscriptionWhereInput
+    /**
+     * Limit how many VideoTranscriptions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * VideoTranscription upsert
+   */
+  export type VideoTranscriptionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VideoTranscription
+     */
+    select?: VideoTranscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VideoTranscription
+     */
+    omit?: VideoTranscriptionOmit<ExtArgs> | null
+    /**
+     * The filter to search for the VideoTranscription to update in case it exists.
+     */
+    where: VideoTranscriptionWhereUniqueInput
+    /**
+     * In case the VideoTranscription found by the `where` argument doesn't exist, create a new VideoTranscription with this data.
+     */
+    create: XOR<VideoTranscriptionCreateInput, VideoTranscriptionUncheckedCreateInput>
+    /**
+     * In case the VideoTranscription was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<VideoTranscriptionUpdateInput, VideoTranscriptionUncheckedUpdateInput>
+  }
+
+  /**
+   * VideoTranscription delete
+   */
+  export type VideoTranscriptionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VideoTranscription
+     */
+    select?: VideoTranscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VideoTranscription
+     */
+    omit?: VideoTranscriptionOmit<ExtArgs> | null
+    /**
+     * Filter which VideoTranscription to delete.
+     */
+    where: VideoTranscriptionWhereUniqueInput
+  }
+
+  /**
+   * VideoTranscription deleteMany
+   */
+  export type VideoTranscriptionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which VideoTranscriptions to delete
+     */
+    where?: VideoTranscriptionWhereInput
+    /**
+     * Limit how many VideoTranscriptions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * VideoTranscription without action
+   */
+  export type VideoTranscriptionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VideoTranscription
+     */
+    select?: VideoTranscriptionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the VideoTranscription
+     */
+    omit?: VideoTranscriptionOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -13178,7 +14225,6 @@ export namespace Prisma {
     video_public_id: 'video_public_id',
     video_thumbnailUrl: 'video_thumbnailUrl',
     video_duration: 'video_duration',
-    transcription: 'transcription',
     transcription_summary: 'transcription_summary',
     sectionId: 'sectionId',
     createdAt: 'createdAt',
@@ -13269,6 +14315,15 @@ export namespace Prisma {
   };
 
   export type SavedFilterDataScalarFieldEnum = (typeof SavedFilterDataScalarFieldEnum)[keyof typeof SavedFilterDataScalarFieldEnum]
+
+
+  export const VideoTranscriptionScalarFieldEnum: {
+    id: 'id',
+    video_publicID: 'video_publicID',
+    transcription_data: 'transcription_data'
+  };
+
+  export type VideoTranscriptionScalarFieldEnum = (typeof VideoTranscriptionScalarFieldEnum)[keyof typeof VideoTranscriptionScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -13531,7 +14586,6 @@ export namespace Prisma {
     video_public_id?: StringFilter<"VideoSection"> | string
     video_thumbnailUrl?: StringFilter<"VideoSection"> | string
     video_duration?: FloatFilter<"VideoSection"> | number
-    transcription?: StringNullableFilter<"VideoSection"> | string | null
     transcription_summary?: StringNullableFilter<"VideoSection"> | string | null
     sectionId?: StringFilter<"VideoSection"> | string
     createdAt?: DateTimeFilter<"VideoSection"> | Date | string
@@ -13546,7 +14600,6 @@ export namespace Prisma {
     video_public_id?: SortOrder
     video_thumbnailUrl?: SortOrder
     video_duration?: SortOrder
-    transcription?: SortOrderInput | SortOrder
     transcription_summary?: SortOrderInput | SortOrder
     sectionId?: SortOrder
     createdAt?: SortOrder
@@ -13564,7 +14617,6 @@ export namespace Prisma {
     video_public_id?: StringFilter<"VideoSection"> | string
     video_thumbnailUrl?: StringFilter<"VideoSection"> | string
     video_duration?: FloatFilter<"VideoSection"> | number
-    transcription?: StringNullableFilter<"VideoSection"> | string | null
     transcription_summary?: StringNullableFilter<"VideoSection"> | string | null
     sectionId?: StringFilter<"VideoSection"> | string
     createdAt?: DateTimeFilter<"VideoSection"> | Date | string
@@ -13579,7 +14631,6 @@ export namespace Prisma {
     video_public_id?: SortOrder
     video_thumbnailUrl?: SortOrder
     video_duration?: SortOrder
-    transcription?: SortOrderInput | SortOrder
     transcription_summary?: SortOrderInput | SortOrder
     sectionId?: SortOrder
     createdAt?: SortOrder
@@ -13601,7 +14652,6 @@ export namespace Prisma {
     video_public_id?: StringWithAggregatesFilter<"VideoSection"> | string
     video_thumbnailUrl?: StringWithAggregatesFilter<"VideoSection"> | string
     video_duration?: FloatWithAggregatesFilter<"VideoSection"> | number
-    transcription?: StringNullableWithAggregatesFilter<"VideoSection"> | string | null
     transcription_summary?: StringNullableWithAggregatesFilter<"VideoSection"> | string | null
     sectionId?: StringWithAggregatesFilter<"VideoSection"> | string
     createdAt?: DateTimeWithAggregatesFilter<"VideoSection"> | Date | string
@@ -14044,6 +15094,48 @@ export namespace Prisma {
     FilterPresetId?: StringWithAggregatesFilter<"SavedFilterData"> | string
   }
 
+  export type VideoTranscriptionWhereInput = {
+    AND?: VideoTranscriptionWhereInput | VideoTranscriptionWhereInput[]
+    OR?: VideoTranscriptionWhereInput[]
+    NOT?: VideoTranscriptionWhereInput | VideoTranscriptionWhereInput[]
+    id?: StringFilter<"VideoTranscription"> | string
+    video_publicID?: StringFilter<"VideoTranscription"> | string
+    transcription_data?: StringFilter<"VideoTranscription"> | string
+  }
+
+  export type VideoTranscriptionOrderByWithRelationInput = {
+    id?: SortOrder
+    video_publicID?: SortOrder
+    transcription_data?: SortOrder
+  }
+
+  export type VideoTranscriptionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: VideoTranscriptionWhereInput | VideoTranscriptionWhereInput[]
+    OR?: VideoTranscriptionWhereInput[]
+    NOT?: VideoTranscriptionWhereInput | VideoTranscriptionWhereInput[]
+    video_publicID?: StringFilter<"VideoTranscription"> | string
+    transcription_data?: StringFilter<"VideoTranscription"> | string
+  }, "id">
+
+  export type VideoTranscriptionOrderByWithAggregationInput = {
+    id?: SortOrder
+    video_publicID?: SortOrder
+    transcription_data?: SortOrder
+    _count?: VideoTranscriptionCountOrderByAggregateInput
+    _max?: VideoTranscriptionMaxOrderByAggregateInput
+    _min?: VideoTranscriptionMinOrderByAggregateInput
+  }
+
+  export type VideoTranscriptionScalarWhereWithAggregatesInput = {
+    AND?: VideoTranscriptionScalarWhereWithAggregatesInput | VideoTranscriptionScalarWhereWithAggregatesInput[]
+    OR?: VideoTranscriptionScalarWhereWithAggregatesInput[]
+    NOT?: VideoTranscriptionScalarWhereWithAggregatesInput | VideoTranscriptionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"VideoTranscription"> | string
+    video_publicID?: StringWithAggregatesFilter<"VideoTranscription"> | string
+    transcription_data?: StringWithAggregatesFilter<"VideoTranscription"> | string
+  }
+
   export type CourseCreateInput = {
     id?: string
     owner: string
@@ -14206,7 +15298,6 @@ export namespace Prisma {
     video_public_id: string
     video_thumbnailUrl: string
     video_duration: number
-    transcription?: string | null
     transcription_summary?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -14220,7 +15311,6 @@ export namespace Prisma {
     video_public_id: string
     video_thumbnailUrl: string
     video_duration: number
-    transcription?: string | null
     transcription_summary?: string | null
     sectionId: string
     createdAt?: Date | string
@@ -14234,7 +15324,6 @@ export namespace Prisma {
     video_public_id?: StringFieldUpdateOperationsInput | string
     video_thumbnailUrl?: StringFieldUpdateOperationsInput | string
     video_duration?: FloatFieldUpdateOperationsInput | number
-    transcription?: NullableStringFieldUpdateOperationsInput | string | null
     transcription_summary?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14248,7 +15337,6 @@ export namespace Prisma {
     video_public_id?: StringFieldUpdateOperationsInput | string
     video_thumbnailUrl?: StringFieldUpdateOperationsInput | string
     video_duration?: FloatFieldUpdateOperationsInput | number
-    transcription?: NullableStringFieldUpdateOperationsInput | string | null
     transcription_summary?: NullableStringFieldUpdateOperationsInput | string | null
     sectionId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14262,7 +15350,6 @@ export namespace Prisma {
     video_public_id: string
     video_thumbnailUrl: string
     video_duration: number
-    transcription?: string | null
     transcription_summary?: string | null
     sectionId: string
     createdAt?: Date | string
@@ -14276,7 +15363,6 @@ export namespace Prisma {
     video_public_id?: StringFieldUpdateOperationsInput | string
     video_thumbnailUrl?: StringFieldUpdateOperationsInput | string
     video_duration?: FloatFieldUpdateOperationsInput | number
-    transcription?: NullableStringFieldUpdateOperationsInput | string | null
     transcription_summary?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14289,7 +15375,6 @@ export namespace Prisma {
     video_public_id?: StringFieldUpdateOperationsInput | string
     video_thumbnailUrl?: StringFieldUpdateOperationsInput | string
     video_duration?: FloatFieldUpdateOperationsInput | number
-    transcription?: NullableStringFieldUpdateOperationsInput | string | null
     transcription_summary?: NullableStringFieldUpdateOperationsInput | string | null
     sectionId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14740,6 +15825,48 @@ export namespace Prisma {
     FilterPresetId?: StringFieldUpdateOperationsInput | string
   }
 
+  export type VideoTranscriptionCreateInput = {
+    id?: string
+    video_publicID: string
+    transcription_data: string
+  }
+
+  export type VideoTranscriptionUncheckedCreateInput = {
+    id?: string
+    video_publicID: string
+    transcription_data: string
+  }
+
+  export type VideoTranscriptionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    video_publicID?: StringFieldUpdateOperationsInput | string
+    transcription_data?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type VideoTranscriptionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    video_publicID?: StringFieldUpdateOperationsInput | string
+    transcription_data?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type VideoTranscriptionCreateManyInput = {
+    id?: string
+    video_publicID: string
+    transcription_data: string
+  }
+
+  export type VideoTranscriptionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    video_publicID?: StringFieldUpdateOperationsInput | string
+    transcription_data?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type VideoTranscriptionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    video_publicID?: StringFieldUpdateOperationsInput | string
+    transcription_data?: StringFieldUpdateOperationsInput | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -14988,7 +16115,6 @@ export namespace Prisma {
     video_public_id?: SortOrder
     video_thumbnailUrl?: SortOrder
     video_duration?: SortOrder
-    transcription?: SortOrder
     transcription_summary?: SortOrder
     sectionId?: SortOrder
     createdAt?: SortOrder
@@ -15006,7 +16132,6 @@ export namespace Prisma {
     video_public_id?: SortOrder
     video_thumbnailUrl?: SortOrder
     video_duration?: SortOrder
-    transcription?: SortOrder
     transcription_summary?: SortOrder
     sectionId?: SortOrder
     createdAt?: SortOrder
@@ -15020,7 +16145,6 @@ export namespace Prisma {
     video_public_id?: SortOrder
     video_thumbnailUrl?: SortOrder
     video_duration?: SortOrder
-    transcription?: SortOrder
     transcription_summary?: SortOrder
     sectionId?: SortOrder
     createdAt?: SortOrder
@@ -15391,6 +16515,24 @@ export namespace Prisma {
 
   export type SavedFilterDataSumOrderByAggregateInput = {
     priceRange?: SortOrder
+  }
+
+  export type VideoTranscriptionCountOrderByAggregateInput = {
+    id?: SortOrder
+    video_publicID?: SortOrder
+    transcription_data?: SortOrder
+  }
+
+  export type VideoTranscriptionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    video_publicID?: SortOrder
+    transcription_data?: SortOrder
+  }
+
+  export type VideoTranscriptionMinOrderByAggregateInput = {
+    id?: SortOrder
+    video_publicID?: SortOrder
+    transcription_data?: SortOrder
   }
 
   export type SectionCreateNestedManyWithoutCourseInput = {
@@ -16279,7 +17421,6 @@ export namespace Prisma {
     video_public_id: string
     video_thumbnailUrl: string
     video_duration: number
-    transcription?: string | null
     transcription_summary?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16292,7 +17433,6 @@ export namespace Prisma {
     video_public_id: string
     video_thumbnailUrl: string
     video_duration: number
-    transcription?: string | null
     transcription_summary?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16373,7 +17513,6 @@ export namespace Prisma {
     video_public_id?: StringFilter<"VideoSection"> | string
     video_thumbnailUrl?: StringFilter<"VideoSection"> | string
     video_duration?: FloatFilter<"VideoSection"> | number
-    transcription?: StringNullableFilter<"VideoSection"> | string | null
     transcription_summary?: StringNullableFilter<"VideoSection"> | string | null
     sectionId?: StringFilter<"VideoSection"> | string
     createdAt?: DateTimeFilter<"VideoSection"> | Date | string
@@ -17111,7 +18250,6 @@ export namespace Prisma {
     video_public_id: string
     video_thumbnailUrl: string
     video_duration: number
-    transcription?: string | null
     transcription_summary?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -17124,7 +18262,6 @@ export namespace Prisma {
     video_public_id?: StringFieldUpdateOperationsInput | string
     video_thumbnailUrl?: StringFieldUpdateOperationsInput | string
     video_duration?: FloatFieldUpdateOperationsInput | number
-    transcription?: NullableStringFieldUpdateOperationsInput | string | null
     transcription_summary?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17137,7 +18274,6 @@ export namespace Prisma {
     video_public_id?: StringFieldUpdateOperationsInput | string
     video_thumbnailUrl?: StringFieldUpdateOperationsInput | string
     video_duration?: FloatFieldUpdateOperationsInput | number
-    transcription?: NullableStringFieldUpdateOperationsInput | string | null
     transcription_summary?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17150,7 +18286,6 @@ export namespace Prisma {
     video_public_id?: StringFieldUpdateOperationsInput | string
     video_thumbnailUrl?: StringFieldUpdateOperationsInput | string
     video_duration?: FloatFieldUpdateOperationsInput | number
-    transcription?: NullableStringFieldUpdateOperationsInput | string | null
     transcription_summary?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

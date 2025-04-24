@@ -144,7 +144,6 @@ exports.Prisma.VideoSectionScalarFieldEnum = {
   video_public_id: 'video_public_id',
   video_thumbnailUrl: 'video_thumbnailUrl',
   video_duration: 'video_duration',
-  transcription: 'transcription',
   transcription_summary: 'transcription_summary',
   sectionId: 'sectionId',
   createdAt: 'createdAt',
@@ -213,6 +212,12 @@ exports.Prisma.SavedFilterDataScalarFieldEnum = {
   FilterPresetId: 'FilterPresetId'
 };
 
+exports.Prisma.VideoTranscriptionScalarFieldEnum = {
+  id: 'id',
+  video_publicID: 'video_publicID',
+  transcription_data: 'transcription_data'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -243,7 +248,8 @@ exports.Prisma.ModelName = {
   SectionProgress: 'SectionProgress',
   VideoProgress: 'VideoProgress',
   FilterPreset: 'FilterPreset',
-  SavedFilterData: 'SavedFilterData'
+  SavedFilterData: 'SavedFilterData',
+  VideoTranscription: 'VideoTranscription'
 };
 
 /**

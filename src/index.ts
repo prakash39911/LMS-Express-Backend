@@ -39,18 +39,18 @@ app.use("/api/advancedFilter", filterRoute);
 app.use("/api/chat", chatRoute);
 app.use("/api/video/transcript", videoTranscriptRoute);
 
-(async function () {
-  const isConnected = await checkConnection();
+// (async function () {
+//   const isConnected = await checkConnection();
 
-  const indexName = process.env.ELASTIC_PRODUCTION_INDEX;
+//   const indexName = process.env.ELASTIC_PRODUCTION_INDEX;
 
-  if (!indexName) {
-    throw new Error("Index name is required");
-  }
-  if (isConnected) {
-    await createIndex(indexName);
-  }
-})();
+//   if (!indexName) {
+//     throw new Error("Index name is required");
+//   }
+//   if (isConnected) {
+//     await createIndex(indexName);
+//   }
+// })();
 
 app.listen(process.env.PORT || 8000, async () => {
   console.log("Server Started on PORT", process.env.PORT);
