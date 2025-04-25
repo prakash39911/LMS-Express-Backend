@@ -2,11 +2,11 @@ import { Request, Response } from "express";
 import { cloudinary } from "../lib/Cloudinary";
 import fs from "fs/promises";
 import path from "path";
-import { fileURLToPath } from "url";
 import fetch from "node-fetch";
 import { geminiClient } from "../lib/GeminiApi";
 import prisma from "../lib/prisma";
 import { getAuth } from "@clerk/express";
+import { GenerateSummaryPdf } from "../lib/summaryPdf";
 
 export async function deleteFromCloudinary(req: Request, res: Response) {
   try {
@@ -128,7 +128,9 @@ export async function handleGenerateSummary(req: Request, res: Response) {
     }
 
     const prompt = `
-    Generate Summary by analysing the text in depth and summary should include all the important points and arranged properly using paragraph, bullet points using HTML tags.
+    Instructions:
+    1. Generate Summary by analysing the text in depth and summary should include all the important points and arranged properly using paragraph, bullet points using HTML tags.
+    2. Do not include strings like '''html or '''. So that i can directly display it correctly on my webpage.
 
     context: 
     ${transcriptionData?.transcription_data}
@@ -198,7 +200,7 @@ export async function handleSaveTranscriptionSummary(
   try {
     const { summary, videoPublicId } = req.body;
 
-    if (!summary) {
+    if (!summary || !videoPublicId) {
       res.status(400).json({ status: false, message: "Insufficient Data" });
       return;
     }
@@ -225,3 +227,84 @@ export async function handleSaveTranscriptionSummary(
     res.status(500).json({ status: false, message: "Internal Server Error" });
   }
 }
+
+export async function handledeleteGeneratedSummary(
+  req: Request,
+  res: Response
+) {
+  try {
+    const { videoPublicId } = req.body;
+
+    if (!videoPublicId) {
+      res.status(400).json({ status: false, message: "Insufficient Data" });
+      return;
+    }
+
+    const videoSection = await prisma.videoSection.findFirst({
+      where: {
+        video_public_id: videoPublicId,
+      },
+    });
+
+    if (!videoSection) {
+      res.status(400).json({ status: false, message: "Data not found" });
+      return;
+    }
+
+    await prisma.videoSection.update({
+      where: {
+        id: videoSection.id,
+      },
+      data: {
+        transcription_summary: "",
+      },
+    });
+
+    res.status(200).json({
+      status: true,
+      message: "Transcription Summary deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({ status: false, message: "Internal Server Error" });
+  }
+}
+
+export const handleGenerateSummaryPdf = async (req: Request, res: Response) => {
+  const { videoPublicId } = req.body;
+
+  if (!videoPublicId) {
+    res.status(400).json({ status: false, message: "Insufficient Data" });
+    return;
+  }
+
+  const summaryData = await prisma.videoSection.findFirst({
+    where: {
+      video_public_id: videoPublicId,
+    },
+    select: {
+      video_title: true,
+      transcription_summary: true,
+      section: {
+        select: {
+          sectionName: true,
+          course: {
+            select: {
+              title: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!summaryData) {
+    res.status(400).json({ status: false, message: "Data Not Found" });
+    return;
+  }
+
+  const pdfBuffer = await GenerateSummaryPdf(summaryData);
+
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader("Content-Disposition", "attachment; filename=summary.pdf");
+  res.send(Buffer.from(pdfBuffer));
+};

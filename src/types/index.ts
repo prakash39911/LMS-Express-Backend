@@ -73,3 +73,14 @@ export type CreatedCourseDataType = {
     }[];
   }[];
 };
+
+export type SummaryDataType = {
+  video_title: string;
+  transcription_summary: string | null;
+  section: {
+    sectionName: string;
+    course: {
+      title: string;
+    };
+  };
+};

@@ -35,6 +35,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "html2canvas": "^1.4.1",
     "jspdf": "^3.0.1",
     "openai": "^4.95.1",
     "razorpay": "^2.9.6",
