@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { cloudinary } from "../lib/Cloudinary";
-import fs from "fs/promises";
+import { promises as fs } from "fs";
 import path from "path";
 import fetch from "node-fetch";
 import { geminiClient } from "../lib/GeminiApi";
@@ -25,28 +25,36 @@ export async function deleteFromCloudinary(req: Request, res: Response) {
   }
 }
 
-async function downloadAndReadFile(cloudinaryUrl: string): Promise<string> {
-  try {
-    const response = await fetch(cloudinaryUrl);
+async function readFile(cloudinaryUrl: string): Promise<string> {
+  const response = await fetch(cloudinaryUrl);
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch file: ${response.statusText}`);
-    }
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
-    const arrayBuffer = await response.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+  return await response.text();
 
-    const tempFilePath = path.join(__dirname, "temp-download-file");
+  // try {
+  //   const response = await fetch(cloudinaryUrl);
 
-    await fs.writeFile(tempFilePath, buffer);
-    const fileContent = await fs.readFile(tempFilePath, "utf8");
-    await fs.unlink(tempFilePath); // Clean up
+  //   if (!response.ok) {
+  //     throw new Error(`Failed to fetch file: ${response.statusText}`);
+  //   }
 
-    return fileContent;
-  } catch (error) {
-    console.error("Error downloading or reading the file:", error);
-    throw error;
-  }
+  //   const arrayBuffer = await response.arrayBuffer();
+  //   const buffer = Buffer.from(arrayBuffer);
+
+  //   console.log(`Downloaded file size: ${buffer.length} bytes`);
+
+  //   const tempFilePath = path.join("/tmp", `temp-file-${Date.now()}`);
+
+  //   await fs.writeFile(tempFilePath, buffer);
+  //   const fileContent = await fs.readFile(tempFilePath, "utf8");
+  //   await fs.unlink(tempFilePath); // Clean up
+
+  //   return fileContent;
+  // } catch (error) {
+  //   console.error("Error downloading or reading the file:", error);
+  //   throw error;
+  // }
 }
 
 export async function handlecloudinaryWebhookForTranscription(
@@ -55,21 +63,23 @@ export async function handlecloudinaryWebhookForTranscription(
 ) {
   const payload = req.body;
 
-  console.log("Transcription Webhook Received, Total Data:-", payload);
-
   // Handle transcription data
   if (
     payload.info_kind === "auto_transcription" &&
     payload.info_status === "complete"
   ) {
     console.log(`Transcription Complete for public ID:- ${payload?.public_id}`);
-    console.log("Transcription Final Data:-", payload?.info_data);
     console.log(
       "Secure Url of Transcription data :-",
       payload?.info_data?.secure_url
     );
 
-    const fileData = await downloadAndReadFile(payload?.info_data?.secure_url);
+    const fileData = await readFile(payload?.info_data?.secure_url);
+
+    console.log(
+      "File data that is downloaded from Cloudinary .transcript",
+      fileData
+    );
 
     const prompt = `
     Please extract all word from the given data and arrange them in sentence properly.
