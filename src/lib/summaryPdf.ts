@@ -51,8 +51,29 @@ export const GenerateSummaryPdf = async (summaryData: SummaryDataType) => {
     doc.setFontSize(10);
 
     const processHtmlToText = (html: string): string => {
-      // Your existing HTML processing code
-      // ...
+      // Replace headers with newlines
+      html = html.replace(/<h[1-6]>(.*?)<\/h[1-6]>/g, "$1");
+
+      // Replace paragraphs with double newlines
+      html = html.replace(/<p>(.*?)<\/p>/g, "\n$1");
+
+      // Handle lists
+      html = html.replace(/<ul>(.*?)<\/ul>/gs, "\n$1");
+      html = html.replace(/<ol>(.*?)<\/ol>/gs, "\n$1");
+      html = html.replace(/<li>(.*?)<\/li>/g, "• $1");
+
+      // Handle bold and italic
+      html = html.replace(/<(b|strong)>(.*?)<\/\1>/g, "$2");
+      html = html.replace(/<(i|em)>(.*?)<\/\1>/g, "$2");
+
+      // Handle code blocks
+      html = html.replace(/<code>(.*?)<\/code>/g, "'$1'");
+
+      // Remove other tags but keep content
+      html = html.replace(/<[^>]+>/g, "");
+
+      // Clean up excessive newlines
+      html = html.replace(/\n\s*\n/g, "\n\n");
       return html.trim();
     };
 
