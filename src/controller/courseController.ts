@@ -120,30 +120,30 @@ export const createCourseHandler = async (req: Request, res: Response) => {
       },
     });
 
-    if (isCourseCreated) {
-      const indexName = process.env.ELASTIC_PRODUCTION_INDEX;
+    // if (isCourseCreated) {
+    //   const indexName = process.env.ELASTIC_PRODUCTION_INDEX;
 
-      if (!indexName) {
-        throw new Error("Index name is not present");
-      }
+    //   if (!indexName) {
+    //     throw new Error("Index name is not present");
+    //   }
 
-      try {
-        await elasticClient.index({
-          index: indexName,
-          document: {
-            id: isCourseCreated.id,
-            title: isCourseCreated.title,
-            description: isCourseCreated.description,
-            createatedAt: new Date(isCourseCreated.createdAt)
-              .toISOString()
-              .split("T")[0],
-          },
-        });
-        console.log("Date Ingested Successfully to Elastic");
-      } catch (error) {
-        console.error("Error while ingesting data to Elastic", error);
-      }
-    }
+    //   try {
+    //     await elasticClient.index({
+    //       index: indexName,
+    //       document: {
+    //         id: isCourseCreated.id,
+    //         title: isCourseCreated.title,
+    //         description: isCourseCreated.description,
+    //         createatedAt: new Date(isCourseCreated.createdAt)
+    //           .toISOString()
+    //           .split("T")[0],
+    //       },
+    //     });
+    //     console.log("Date Ingested Successfully to Elastic");
+    //   } catch (error) {
+    //     console.error("Error while ingesting data to Elastic", error);
+    //   }
+    // }
 
     await handleCreateEmbeddingsFromCourseDataAndStoreIntoVecorDB(
       courseCreated as CreatedCourseDataType
