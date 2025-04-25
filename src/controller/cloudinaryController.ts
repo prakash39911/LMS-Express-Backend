@@ -98,6 +98,8 @@ export async function handlecloudinaryWebhookForTranscription(
       return;
     }
 
+    console.log("Gemini Response RAW Data :-", response);
+
     console.log("gemini response from the given INPUT: -----", response.text);
 
     const createEntryInDB = await prisma.videoTranscription.create({
