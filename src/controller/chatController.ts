@@ -34,7 +34,7 @@ export async function handleChat(req: Request, res: Response) {
       .join(`\n\n`);
 
     const prompt = `
-      You are a helpful and knowledgeable assistant for our course selling application. You will use the provided context to answer user questions about our courses.
+      You are a helpful and knowledgeable assistant for our course selling application. You will use the provided context to answer user questions about our courses. If the question is not directly related to the courses in the context, use your general knowledge to provide a helpful answer.
 
       Context:
       ${context}
@@ -43,35 +43,27 @@ export async function handleChat(req: Request, res: Response) {
       ${query}
 
       Example:
-      
-      User Query: Do you have any courses on data science for beginners?
-      Response: Based on the current information, there are no courses similar to that.
 
-      User Query: Tell me about machine learning.
-      Response: Machine learning is a field of artificial intelligence that focuses on enabling computers to learn from data without being explicitly programmed. [... general knowledge answer ...]
+      User Query: Do you have any courses on data science for beginners?
+      Response: Based on the current information, there are no courses specifically for data science beginners. However, we offer an introductory course on artificial intelligence that you might find helpful.
+
+      User Query: Tell me about the history of the internet.
+      Response: The internet's origins can be traced back to the late 1960s with the development of ARPANET by the U.S. Department of Defense... [general knowledge answer about the internet's history]
 
       Instructions:
 
       1.  **Answer based on the context:** If the user's question is directly related to the courses described in the context, use that information to formulate your response. Be specific and provide relevant details.
 
-      2.  **Address general queries:** If the user's question falls outside the scope of the provided courses or context, use your general knowledge to answer.
+      2.  **Address general queries:** If the user's question falls outside the scope of the provided courses or context, use your general knowledge to answer it accurately and helpfully.
 
-      3.  **Handle requests for similar courses:** If the user asks about similar courses and the context doesn't mention any, respond clearly and directly with: "Based on the current information, there are no courses similar to that." Avoid vague or apologetic phrasing.
+      3.  **Handle requests for similar courses:** If the user asks about similar courses and the context doesn't mention any, respond clearly and directly. You can also suggest related courses if you know of any from your general knowledge.
 
-      4.  **Maintain accuracy:** Do not invent information or mention courses that are not present in the provided context.
+      4.  **Maintain accuracy:** Do not invent information or mention courses that are not present in the provided context unless you are using your general knowledge for unrelated queries. Clearly distinguish between answers based on the provided context and those based on general knowledge.
 
       5.  **Be direct and confident:** Provide straightforward answers without unnecessary apologies or hedging.
 
       Response:
       `;
-
-    // const response = await geminiClient.models.generateContent({
-    //   model: "gemini-2.0-flash",
-    //   contents: prompt,
-    // });
-
-    // console.log("Response received from gemini", response.text);
-    // res.status(200).json({ status: true, data: response.text });
 
     const response = await geminiClient.models.generateContent({
       model: "gemini-2.0-flash",
@@ -84,7 +76,7 @@ export async function handleChat(req: Request, res: Response) {
       data: response.text,
     });
   } catch (error) {
-    console.error("Error occured in chat", error);
+    console.error("Error occurred in chat", error);
     res
       .status(500)
       .json({ status: false, message: "Failed to generate response" });

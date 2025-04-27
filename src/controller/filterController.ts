@@ -47,13 +47,11 @@ export async function handleCreatePreset(req: Request, res: Response) {
 
       res.status(200).json({
         status: true,
-        data: result,
+        data: result?.SavedFilterData[0],
         message: "Preset Saved Successfully",
       });
       return;
-    }
-
-    if (isFilterPresetCreatedEver) {
+    } else if (isFilterPresetCreatedEver) {
       const count = await prisma.savedFilterData.findMany({
         where: {
           FilterPresetId: isFilterPresetCreatedEver.id,
@@ -67,13 +65,7 @@ export async function handleCreatePreset(req: Request, res: Response) {
         return;
       }
 
-      const isPresetNameExists = await prisma.savedFilterData.findFirst({
-        where: {
-          name: PrevName,
-        },
-      });
-
-      if (!isPresetNameExists) {
+      if (!PrevName) {
         const result = await prisma.savedFilterData.create({
           data: {
             name: presetName,
@@ -88,9 +80,21 @@ export async function handleCreatePreset(req: Request, res: Response) {
           data: result,
           message: "Preset Saved Successfully",
         });
-      }
+      } else if (PrevName) {
+        const isPresetNameExists = await prisma.savedFilterData.findFirst({
+          where: {
+            name: PrevName,
+          },
+        });
 
-      if (isPresetNameExists) {
+        if (!isPresetNameExists) {
+          res.status(400).json({
+            status: false,
+            message: "Something went wrong while finding data",
+          });
+          return;
+        }
+
         const result = await prisma.savedFilterData.update({
           where: {
             id: isPresetNameExists.id,
