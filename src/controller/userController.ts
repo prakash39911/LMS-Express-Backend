@@ -146,6 +146,7 @@ export async function handleGetDashboardDetails(req: Request, res: Response) {
         title: true,
         enrolledStudents: {
           select: {
+            studentId: true,
             amount: true,
             created_at: true,
             courseId: true,
