@@ -93,12 +93,19 @@ export async function handlecloudinaryWebhookForTranscription(
       contents: prompt,
     });
 
-    if (!response) {
-      console.error("Error getiing gemini response");
+    console.log("Gemini Response RAW Data :-", response);
+
+    if (!response || !response.text) {
+      console.error(
+        "Error generating Response using Gemini, Many be because of copyright content"
+      );
+      res.status(400).json({
+        status: false,
+        message: "Transcription Failed, Coz of Copyright Content",
+      });
+
       return;
     }
-
-    console.log("Gemini Response RAW Data :-", response);
 
     console.log("gemini response from the given INPUT: -----", response.text);
 
