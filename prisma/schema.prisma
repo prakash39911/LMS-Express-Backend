@@ -131,8 +131,28 @@ model VideoTranscription {
   transcription_data String
 }
 
+model ChatMessage {
+  id           String         @id @default(cuid())
+  userId       String
+  MessageStore MessageStore[]
+}
+
+model MessageStore {
+  id            String      @id @default(cuid())
+  role          role
+  message       String
+  createdAt     DateTime    @default(now())
+  chatMessageId String
+  ChatMessage   ChatMessage @relation(fields: [chatMessageId], references: [id])
+}
+
 enum payment_status {
   PENDING
   CAPTURED
   FAILED
+}
+
+enum role {
+  user
+  system
 }

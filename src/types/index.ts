@@ -84,3 +84,10 @@ export type SummaryDataType = {
     };
   };
 };
+
+export type ChatMessage = {
+  id: string;
+  text: string;
+  sender: "user" | "system";
+  timestamp: Date;
+};
