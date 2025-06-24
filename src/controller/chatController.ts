@@ -185,6 +185,13 @@ export const handleGetConversationHistory = async (
       },
     });
 
+    if (history.length === 0) {
+      res
+        .status(200)
+        .json({ status: true, message: "There is no history", data: [] });
+      return;
+    }
+
     const finalArray = history[0].MessageStore;
 
     const MessageListArray = finalArray.map((eachObj) => ({
