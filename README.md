@@ -1,172 +1,155 @@
-Learning Management System (LMS) - Backend
-This repository contains the backend source code for a modern, feature-rich Learning Management System. The server is built with Node.js, Express, and TypeScript, providing a robust, type-safe, and scalable foundation for the application. It handles all business logic, data management, and integrations with third-party services like Clerk for authentication and Razorpay for payments.
-Live Demo lms-next-js-frontend.vercel.app
-Frontend Repository github.com/prakash39911/LMS-NextJS-Frontend
-Backend Repository (You are here)
-<br/>
-✨ Key Features
-This LMS platform is designed with distinct, powerful features for both course creators (Teachers) and learners (Students).
-For Teachers (Course Creators)
-Course Creation & Management: Effortlessly create, upload, edit, and publish video courses with rich text descriptions, chapters, and attachments.
-Advanced Teacher Dashboard: An analytics dashboard to visualize key metrics:
-Total revenue and courses sold.
-Number of student enrollments.
-Sales performance chart for the last 30 days.
-Income distribution pie chart by course.
-Secure Payment Integration: Sell courses securely using Razorpay, a trusted payment gateway.
-For Students (Learners)
-Course Marketplace: Browse, search, and purchase courses from a diverse catalog.
-Course Progress Tracking: Automatically track and save progress for each course, allowing students to resume learning exactly where they left off.
-Student Billing Section: View purchase history and download PDF invoices for all transactions.
-Course Ratings: Provide feedback and ratings for purchased courses.
-AI-Powered Learning Tools:
-Video Summary Generation: Generate concise AI summaries of course videos for quick revision.
-Downloadable Summaries: Download the generated summaries as PDF files.
-Core System Features
-Robust Authentication & Authorization: Secure user authentication handled by Clerk, supporting sign-in, sign-up, and session management.
-Role-Based Access Control (RBAC): Distinct roles for Teachers and Students, ensuring users can only access features relevant to their role.
-AI-Powered Chatbot (RAG):
-An intelligent chatbot built using the Retrieval-Augmented Generation (RAG) architecture.
-Utilizes Pinecone vector database for semantic search, allowing users to ask detailed questions about course content and receive accurate answers.
-Can also handle general queries, acting as a comprehensive support agent.
-<br/>
-🛠️ Tech Stack & Architecture
-This project is built with a modern, scalable, and type-safe technology stack.
-Backend
-Runtime: Node.js
-Framework: Express.js
-Language: TypeScript
-ORM: Prisma
-API Style: RESTful API
-Frontend
-Framework: Next.js 14 (with App Router)
-Language: TypeScript
-Styling: Tailwind CSS & Shadcn/ui
-State Management: Zustand
-Form Management: React Hook Form & Zod for validation
-Performance: Lighthouse scores: 100 (SEO), 97 (Performance).
-Database
-Database: PostgreSQL
-Vector Database: Pinecone (for RAG AI)
-Services & Integrations
-Authentication: Clerk
-Payment Gateway: Razorpay
-AI: RAG (Retrieval-Augmented Generation)
-Deployment
-Backend: Render
-Frontend: Vercel
-<br/>
-⚙️ System Architecture Overview
-Generated mermaid
-graph TD
-subgraph "User's Browser"
-A[Next.js Frontend on Vercel]
-end
+# Learning Management System (LMS) - Backend
 
-    subgraph "Backend on Render"
-        B[Express.js REST API]
-        C[Prisma ORM]
-        D[PostgreSQL Database]
-    end
+**Live Application:** [https://lms-next-js-frontend.vercel.app/](https://lms-next-js-frontend.vercel.app/)  
+**Frontend Repository:** [https://github.com/prakash39911/LMS-NextJS-Frontend](https://github.com/prakash39911/LMS-NextJS-Frontend)
 
-    subgraph "Third-Party Services"
-        E[Clerk -- for Authentication]
-        F[Razorpay -- for Payments]
-        G[Pinecone -- for AI Vector Search]
-        H[AI Model -- for Summary/Chat]
-    end
+## 🚀 Technology Stack
 
-    A -- "API Requests (Authenticated)" --> B
-    B -- "Database Queries" --> C
-    C -- "Manages Connection" --> D
-    B -- "Validates User Token" --> E
-    B -- "Creates Payment Orders" --> F
-    B -- "Semantic Search & RAG" --> G
-    B -- "Generates Content" --> H
+### Frontend
 
-    style A fill:#000,color:#fff,stroke:#fff
-    style B fill:#83a6ee,color:#000
-    style D fill:#336791,color:#fff
-    style E fill:#6C47FF,color:#fff
-    style F fill:#3C87F4,color:#fff
-    style G fill:#FFC107,color:#000
+- **Framework:** Next.js (App Router)
+- **Language:** TypeScript
+- **State Management:** Zustand
+- **Forms & Validation:** React Hook Form + Zod
+- **Styling:** Tailwind CSS
+- **Authentication UI:** Clerk Components
+- **Payment Integration:** Razorpay
+- **AI Components:** RAG (Retrieval-Augmented Generation)
+- **Deployment:** Vercel
 
-Use code with caution.
-Mermaid
-<br/>
-🚀 Getting Started
-Follow these instructions to set up and run the backend server locally.
-Prerequisites
-Node.js (v18 or later)
-npm or yarn
-PostgreSQL database instance
-Installation & Setup
-Clone the repository:
-Generated bash
-git clone https://github.com/your-username/LMS-Express-Backend.git
-cd LMS-Express-Backend
-Use code with caution.
-Bash
-Install dependencies:
-Generated bash
-npm install
-Use code with caution.
-Bash
-Set up environment variables:
-Create a .env file in the root of the project and add the necessary variables. You can use the .env.example file as a template.
-Generated bash
-cp .env.example .env
-Use code with caution.
-Bash
-.env.example:
-Generated env
+### Backend
 
-# PostgreSQL Database URL from your provider
+- **Framework:** Express.js
+- **Language:** TypeScript
+- **ORM:** Prisma
+- **Database:** PostgreSQL
+- **Authentication:** Clerk
+- **Payment Processing:** Razorpay API
+- **Vector Database:** Pinecone (for RAG AI)
+- **Deployment:** Render.com
 
-# Format: postgresql://USER:PASSWORD@HOST:PORT/DATABASE
+### Performance & Quality
 
-DATABASE_URL="postgresql://user:password@host:port/database"
+- **Lighthouse Scores:** SEO 100, Performance 97
+- **Type Safety:** Full TypeScript implementation
+- **Responsive Design:** Mobile-first approach
 
-# Clerk Authentication
+## 🔥 Key Features
 
-CLERK_SECRET_KEY="your_clerk_secret_key"
+### 🛡️ Authentication & Authorization
 
-# Razorpay API Keys
+- Secure authentication using **Clerk** (with social logins)
+- Role-based access control (Teacher/Student)
+- Protected API routes with JWT verification
 
-RAZORPAY_KEY_ID="your_razorpay_key_id"
-RAZORPAY_KEY_SECRET="your_razorpay_key_secret"
+### 👨‍🏫 Teacher Features
 
-# Pinecone Vector DB for AI Chatbot
+1. **Course Management**
 
-PINECONE_API_KEY="your_pinecone_api_key"
-PINECONE_ENVIRONMENT="your_pinecone_environment"
+   - Create/upload video courses with rich descriptions
+   - Set pricing for premium courses
+   - Edit/update course content
 
-# Frontend URL for CORS
+2. **Analytics Dashboard**
+   - View courses sold and student enrollment metrics
+   - 30-day sales trend visualization (charts)
+   - Income distribution by course (pie charts)
+   - Revenue tracking
 
-FRONTEND_STORE_URL="http://localhost:3000"
-Use code with caution.
-Env
-Run database migrations:
-Prisma will sync the schema with your PostgreSQL database.
-Generated bash
-npx prisma migrate dev
-Use code with caution.
-Bash
-Start the development server:
-Generated bash
-npm run dev
-Use code with caution.
-Bash
-The server will be running on http://localhost:8000 (or the port you specify).
-<br/>
-📖 API Endpoints Overview
-The API follows RESTful conventions. All endpoints are prefixed with /api.
-POST /api/auth/webhook: Webhook to sync user data from Clerk.
-GET /api/courses: Get all published courses.
-POST /api/courses: Create a new course (Teacher only).
-GET /api/courses/:courseId: Get details for a specific course.
-PATCH /api/courses/:courseId: Update a course (Teacher only).
-POST /api/courses/:courseId/chapters: Add a new chapter to a course.
-POST /api/courses/:courseId/checkout: Create a Razorpay checkout session for a course.
-GET /api/analytics: Get teacher dashboard analytics (Teacher only).
-POST /api/chatbot: Handle user queries for the AI chatbot.
+### 👨‍🎓 Student Features
+
+1. **Course Experience**
+
+   - Browse and purchase courses
+   - Rate and review purchased courses
+   - Track progress through course content
+   - Resume watching from last position
+
+2. **AI-Powered Learning Tools**
+
+   - Chatbot with RAG architecture for course queries
+   - AI-generated video summaries
+   - PDF export of course summaries
+
+3. **Billing Management**
+   - Purchase history
+   - Downloadable invoice PDFs
+   - Payment receipts
+
+### 💰 Payment System
+
+- Integrated Razorpay payment gateway
+- Secure checkout flow
+- Payment verification webhooks
+- Purchase confirmation emails
+
+### 🤖 AI Integration
+
+- **RAG (Retrieval-Augmented Generation) Chatbot**
+
+  - Semantic search powered by Pinecone vector DB
+  - Answers both course-specific and general questions
+  - Context-aware responses
+
+- **Video Summarization**
+  - AI-generated concise summaries
+  - PDF export functionality
+  - Key concept extraction
+
+### 🛠️ Technical Highlights
+
+1. **Backend Architecture**
+
+   - RESTful API design
+   - Type-safe Express.js with TypeScript
+   - Prisma ORM for database operations
+   - Modular code structure
+
+2. **Performance Optimizations**
+
+   - Efficient database queries
+   - Caching strategies
+   - Optimized media delivery
+
+3. **DevOps**
+   - CI/CD pipelines
+   - Automated deployments
+   - Environment management
+
+## 📊 Database Schema (PostgreSQL)
+
+- Users (synced with Clerk)
+- Courses
+- Enrollments
+- Payments
+- Progress Tracking
+- Reviews/Ratings
+- Chatbot Conversations
+- Vector embeddings (Pinecone)
+
+## 🌐 Deployment
+
+- **Frontend:** Vercel (Next.js)
+- **Backend:** Render.com (Node.js)
+- **Database:** PostgreSQL (Render.com)
+- **Vector DB:** Pinecone
+
+## 🧰 Development Tools
+
+- Prisma Studio for database management
+- Postman/Thunder Client for API testing
+- Zod for runtime validation
+- ESLint + Prettier for code quality
+
+## 🚧 Future Roadmap
+
+- [ ] Course completion certificates
+- [ ] Discussion forums
+- [ ] Mobile app (React Native)
+- [ ] Enhanced analytics
+- [ ] Bulk course uploads
+- [ ] Affiliate program
+
+## 📜 License
+
+MIT License - See [LICENSE](LICENSE) for details.
