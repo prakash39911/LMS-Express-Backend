@@ -5,13 +5,6 @@ import { getAuth } from "@clerk/express";
 import { elasticClient } from "../lib/elasticClient";
 import { CreatedCourseDataType, searchFunctionReturnType } from "../types";
 import {
-  calTotalCourseDuration,
-  secondsToMinutesOrHour,
-} from "../lib/utilityFunctions";
-import { createPineconeIndexIfNotExist } from "../lib/pineconeIndex";
-import { pineconeClient } from "../lib/PineconeClient";
-import { TextToEmbeddings } from "../lib/GeminiApi";
-import {
   getStructuredCourseDataForID,
   handleCreateEmbeddingsFromCourseDataAndStoreIntoVecorDB,
 } from "../lib/VectorDbUtilityFn";
