@@ -2,14 +2,14 @@
 
 ## 🚀 Overview
 
-> A full-featured online Learning Management System built with modern technologies, offering teachers the ability to create and sell video courses and students a seamless learning experience enhanced by AI-driven features.
+> A full-stack Learning Management System where teachers can create, sell, and analyze video courses. Students enjoy a seamless learning experience with progress tracking, secure Razorpay payments, and innovative AI tools. Instantly generate video summaries for revision or ask the intelligent RAG chatbot for course details. Built with Next.js and Node.js for top-tier performance and SEO.
 
 ---
 
 ## 🚀 Project Links
 
-- **Live Demo:** [https://lms-next-js-frontend.vercel.app/](https://lms-next-js-frontend.vercel.app/)
-- **Frontend Repository:** [https://github.com/prakash39911/LMS-NextJS-Frontend](https://github.com/prakash39911/LMS-NextJS-Frontend)
+- **Live Demo:** [Live Link](https://lms-next-js-frontend.vercel.app/)
+- **Frontend Repository:** [Frontend Repo](https://github.com/prakash39911/LMS-NextJS-Frontend)
 
 ---
 
@@ -24,9 +24,9 @@
 | **Authentication**           | Clerk                                   | User signup, login, session management                          |
 | **Payments**                 | Razorpay                                | Secure payment processing                                       |
 | **AI & RAG**                 | Gemini embeddings, Pinecone Vector DB   | Semantic search, Retrieval-Augmented Generation (RAG) chatbot   |
-| **File Hosting**             | Vercel (frontend), Render.com (backend) | Continuous deployment and hosting                               |
+| **Hosting**                  | Vercel (frontend), Render.com (backend) | Continuous deployment and hosting                               |
 | **Forms & Validation**       | React Hook Form, Zod                    | Form state management, schema-based validation                  |
-| **Charts & Data Viz**        | Recharts                                | Display sales, enrollment, and income analytics                 |
+| **Charts & Data**            | Recharts                                | Display sales, enrollment, and income analytics                 |
 | **PDF Generation**           | jsPDF                                   | Generate downloadable summary & billing PDFs                    |
 | **Styling & Responsiveness** | Tailwind CSS                            | Utility-first CSS framework for responsive design               |
 | **Development Tools**        | Ngrok                                   | Webhook testing                                                 |
@@ -56,12 +56,7 @@
    - Track course progress with completion percentages.
    - View billing history and download invoice PDFs.
 
-4. **Payment Flow**
-
-   - Razorpay integration for secure transactions.
-   - Webhook handling via Express to record payment status.
-
-5. **AI-Powered Enhancements**
+4. **AI-Powered Enhancements**
 
    - **RAG Chatbot:**
      - Semantic search over course content using "gemini-embedding" model & Pinecone.
@@ -69,6 +64,11 @@
    - **Video Summary Generator:**
      - Automatically produce concise, text-based summaries of video lectures.
      - Downloadable PDF summaries for quick revision.
+
+5. **Payment Flow**
+
+   - Razorpay integration for secure transactions.
+   - Webhook handling via Express to record payment status.
 
 6. **API & Data Layer**
 
@@ -91,7 +91,7 @@
 
 1. **Frontend**
    ```bash
-   git clone <https://github.com/prakash39911/LMS-NextJS-Frontend>
+   git clone https://github.com/prakash39911/LMS-NextJS-Frontend
    cd LMS-NextJS-Frontend
    npm install
    npm run dev
