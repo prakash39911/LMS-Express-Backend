@@ -1,155 +1,92 @@
-# Learning Management System (LMS) - Backend
+# Learning Management System (LMS)
 
-**Live Application:** [https://lms-next-js-frontend.vercel.app/](https://lms-next-js-frontend.vercel.app/)  
-**Frontend Repository:** [https://github.com/prakash39911/LMS-NextJS-Frontend](https://github.com/prakash39911/LMS-NextJS-Frontend)
+> A full-featured online Learning Management System built with modern technologies, offering teachers the ability to create and sell video courses and students a seamless learning experience enhanced by AI-driven features.
 
-## 🚀 Technology Stack
+---
 
-### Frontend
+## 🚀 Project Links
 
-- **Framework:** Next.js (App Router)
-- **Language:** TypeScript
-- **State Management:** Zustand
-- **Forms & Validation:** React Hook Form + Zod
-- **Styling:** Tailwind CSS
-- **Authentication UI:** Clerk Components
-- **Payment Integration:** Razorpay
-- **AI Components:** RAG (Retrieval-Augmented Generation)
-- **Deployment:** Vercel
+- **Live Demo:** [https://lms-next-js-frontend.vercel.app/](https://lms-next-js-frontend.vercel.app/)
+- **Frontend Repository:** [github.com/prakash39911/LMS-NextJS-Frontend](https://github.com/prakash39911/LMS-NextJS-Frontend)
 
-### Backend
+---
 
-- **Framework:** Express.js
-- **Language:** TypeScript
-- **ORM:** Prisma
-- **Database:** PostgreSQL
-- **Authentication:** Clerk
-- **Payment Processing:** Razorpay API
-- **Vector Database:** Pinecone (for RAG AI)
-- **Deployment:** Render.com
+## 🧰 Tech Stack
 
-### Performance & Quality
+| Layer                        | Technology / Service                    | Purpose                                                         |
+| ---------------------------- | --------------------------------------- | --------------------------------------------------------------- |
+| **Frontend**                 | Next.js, React, Tailwind CSS, Zustand   | Server-Side Rendering, UI components, styling, state management |
+| **Backend**                  | Node.js, Express, TypeScript            | REST API development, type safety                               |
+| **Database**                 | PostgreSQL, Prisma ORM                  | Relational data storage, schema migrations                      |
+| **Authentication**           | Clerk                                   | User signup, login, session management                          |
+| **Payments**                 | Razorpay                                | Secure payment processing                                       |
+| **AI & RAG**                 | OpenAI embeddings, Pinecone Vector DB   | Semantic search, Retrieval-Augmented Generation (RAG) chatbot   |
+| **File Hosting**             | Vercel (frontend), Render.com (backend) | Continuous deployment and hosting                               |
+| **Forms & Validation**       | React Hook Form, Zod                    | Form state management, schema-based validation                  |
+| **Charts & Data Viz**        | Chart.js (or Recharts)                  | Display sales, enrollment, and income analytics                 |
+| **PDF Generation**           | jsPDF or PDFKit                         | Generate downloadable summary & billing PDFs                    |
+| **Styling & Responsiveness** | Tailwind CSS                            | Utility-first CSS framework for responsive design               |
 
-- **Lighthouse Scores:** SEO 100, Performance 97
-- **Type Safety:** Full TypeScript implementation
-- **Responsive Design:** Mobile-first approach
+---
 
-## 🔥 Key Features
+## 📋 Features
 
-### 🛡️ Authentication & Authorization
+1. **User Authentication & Authorization**
 
-- Secure authentication using **Clerk** (with social logins)
-- Role-based access control (Teacher/Student)
-- Protected API routes with JWT verification
+   - Clerk-powered signup and login flows.
+   - Role-based access control: **Teacher** & **Student**.
 
-### 👨‍🏫 Teacher Features
+2. **Course Management (Teacher)**
 
-1. **Course Management**
+   - Create, upload, and edit video-based courses.
+   - Set pricing for each course.
+   - View course sales, student enrollments, and revenue metrics.
+   - **Dashboard Analytics:**
+     - Sales & enrollments over the last 30 days (line/bar chart).
+     - Course-wise income distribution (pie chart).
 
-   - Create/upload video courses with rich descriptions
-   - Set pricing for premium courses
-   - Edit/update course content
+3. **Student Experience**
 
-2. **Analytics Dashboard**
-   - View courses sold and student enrollment metrics
-   - 30-day sales trend visualization (charts)
-   - Income distribution by course (pie charts)
-   - Revenue tracking
+   - Browse and purchase courses.
+   - Submit course ratings and reviews post-purchase.
+   - Track course progress with completion percentages.
+   - View billing history and download invoice PDFs.
 
-### 👨‍🎓 Student Features
+4. **Payment Flow**
 
-1. **Course Experience**
+   - Razorpay integration for secure transactions.
+   - Webhook handling via Express to record payment status.
 
-   - Browse and purchase courses
-   - Rate and review purchased courses
-   - Track progress through course content
-   - Resume watching from last position
+5. **AI-Powered Enhancements**
 
-2. **AI-Powered Learning Tools**
+   - **RAG Chatbot:**
+     - Semantic search over course content using OpenAI embeddings & Pinecone.
+     - Answer general and course-specific queries in real time.
+   - **Video Summary Generator:**
+     - Automatically produce concise, text-based summaries of video lectures.
+     - Downloadable PDF summaries for quick revision.
 
-   - Chatbot with RAG architecture for course queries
-   - AI-generated video summaries
-   - PDF export of course summaries
+6. **API & Data Layer**
 
-3. **Billing Management**
-   - Purchase history
-   - Downloadable invoice PDFs
-   - Payment receipts
+   - Fully-typed REST APIs using Express + TypeScript.
+   - PostgreSQL database managed with Prisma ORM.
+   - Secure environment variable management for API keys, database URLs, and secrets.
 
-### 💰 Payment System
+7. **Performance & SEO**
 
-- Integrated Razorpay payment gateway
-- Secure checkout flow
-- Payment verification webhooks
-- Purchase confirmation emails
+   - Frontend Lighthouse audit scores: **SEO: 100**, **Performance: 97**.
+   - Server-side rendering (SSR) for faster page loads and improved crawlability.
 
-### 🤖 AI Integration
+8. **Responsive Design**
+   - Tailwind CSS for utility-first, mobile-first styling.
+   - Seamless UX across desktop, tablet, and mobile devices.
 
-- **RAG (Retrieval-Augmented Generation) Chatbot**
+---
 
-  - Semantic search powered by Pinecone vector DB
-  - Answers both course-specific and general questions
-  - Context-aware responses
+## ⚙️ Getting Started (Backend)
 
-- **Video Summarization**
-  - AI-generated concise summaries
-  - PDF export functionality
-  - Key concept extraction
-
-### 🛠️ Technical Highlights
-
-1. **Backend Architecture**
-
-   - RESTful API design
-   - Type-safe Express.js with TypeScript
-   - Prisma ORM for database operations
-   - Modular code structure
-
-2. **Performance Optimizations**
-
-   - Efficient database queries
-   - Caching strategies
-   - Optimized media delivery
-
-3. **DevOps**
-   - CI/CD pipelines
-   - Automated deployments
-   - Environment management
-
-## 📊 Database Schema (PostgreSQL)
-
-- Users (synced with Clerk)
-- Courses
-- Enrollments
-- Payments
-- Progress Tracking
-- Reviews/Ratings
-- Chatbot Conversations
-- Vector embeddings (Pinecone)
-
-## 🌐 Deployment
-
-- **Frontend:** Vercel (Next.js)
-- **Backend:** Render.com (Node.js)
-- **Database:** PostgreSQL (Render.com)
-- **Vector DB:** Pinecone
-
-## 🧰 Development Tools
-
-- Prisma Studio for database management
-- Postman/Thunder Client for API testing
-- Zod for runtime validation
-- ESLint + Prettier for code quality
-
-## 🚧 Future Roadmap
-
-- [ ] Course completion certificates
-- [ ] Discussion forums
-- [ ] Mobile app (React Native)
-- [ ] Enhanced analytics
-- [ ] Bulk course uploads
-- [ ] Affiliate program
-
-## 📜 License
-
-MIT License - See [LICENSE](LICENSE) for details.
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/prakash39911/LMS-NextJS-Backend.git
+   cd LMS-NextJS-Backend
+   ```
