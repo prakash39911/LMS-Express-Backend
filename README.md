@@ -1,4 +1,4 @@
-# Learning Management System (LMS)
+# Learning Management System (LMS) - Backend
 
 > A full-featured online Learning Management System built with modern technologies, offering teachers the ability to create and sell video courses and students a seamless learning experience enhanced by AI-driven features.
 
@@ -18,13 +18,14 @@
 | **Frontend**                 | Next.js, React, Tailwind CSS, Zustand   | Server-Side Rendering, UI components, styling, state management |
 | **Backend**                  | Node.js, Express, TypeScript            | REST API development, type safety                               |
 | **Database**                 | PostgreSQL, Prisma ORM                  | Relational data storage, schema migrations                      |
+| **Media Storage**            | Cloudinary                              | Stores images and videos on the cloud                           |
 | **Authentication**           | Clerk                                   | User signup, login, session management                          |
 | **Payments**                 | Razorpay                                | Secure payment processing                                       |
-| **AI & RAG**                 | OpenAI embeddings, Pinecone Vector DB   | Semantic search, Retrieval-Augmented Generation (RAG) chatbot   |
+| **AI & RAG**                 | Gemini embeddings, Pinecone Vector DB   | Semantic search, Retrieval-Augmented Generation (RAG) chatbot   |
 | **File Hosting**             | Vercel (frontend), Render.com (backend) | Continuous deployment and hosting                               |
 | **Forms & Validation**       | React Hook Form, Zod                    | Form state management, schema-based validation                  |
-| **Charts & Data Viz**        | Chart.js (or Recharts)                  | Display sales, enrollment, and income analytics                 |
-| **PDF Generation**           | jsPDF or PDFKit                         | Generate downloadable summary & billing PDFs                    |
+| **Charts & Data Viz**        | Recharts                                | Display sales, enrollment, and income analytics                 |
+| **PDF Generation**           | jsPDF                                   | Generate downloadable summary & billing PDFs                    |
 | **Styling & Responsiveness** | Tailwind CSS                            | Utility-first CSS framework for responsive design               |
 
 ---
@@ -38,17 +39,17 @@
 
 2. **Course Management (Teacher)**
 
-   - Create, upload, and edit video-based courses.
+   - Create, upload video-based courses.
    - Set pricing for each course.
    - View course sales, student enrollments, and revenue metrics.
    - **Dashboard Analytics:**
-     - Sales & enrollments over the last 30 days (line/bar chart).
+     - Sales & enrollments over the last 30 days (Line chart).
      - Course-wise income distribution (pie chart).
 
 3. **Student Experience**
 
    - Browse and purchase courses.
-   - Submit course ratings and reviews post-purchase.
+   - Submit course ratings post-purchase.
    - Track course progress with completion percentages.
    - View billing history and download invoice PDFs.
 
@@ -60,7 +61,7 @@
 5. **AI-Powered Enhancements**
 
    - **RAG Chatbot:**
-     - Semantic search over course content using OpenAI embeddings & Pinecone.
+     - Semantic search over course content using "gemini-embedding" model & Pinecone.
      - Answer general and course-specific queries in real time.
    - **Video Summary Generator:**
      - Automatically produce concise, text-based summaries of video lectures.
