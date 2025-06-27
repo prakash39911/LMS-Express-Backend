@@ -1,5 +1,7 @@
 # Learning Management System (LMS) - Backend
 
+## 🚀 Overview
+
 > A full-featured online Learning Management System built with modern technologies, offering teachers the ability to create and sell video courses and students a seamless learning experience enhanced by AI-driven features.
 
 ---
@@ -7,11 +9,11 @@
 ## 🚀 Project Links
 
 - **Live Demo:** [https://lms-next-js-frontend.vercel.app/](https://lms-next-js-frontend.vercel.app/)
-- **Frontend Repository:** [github.com/prakash39911/LMS-NextJS-Frontend](https://github.com/prakash39911/LMS-NextJS-Frontend)
+- **Frontend Repository:** [https://github.com/prakash39911/LMS-NextJS-Frontend](https://github.com/prakash39911/LMS-NextJS-Frontend)
 
 ---
 
-## 🧰 Tech Stack
+## 🛠️ Tech Stack
 
 | Layer                        | Technology / Service                    | Purpose                                                         |
 | ---------------------------- | --------------------------------------- | --------------------------------------------------------------- |
@@ -27,10 +29,11 @@
 | **Charts & Data Viz**        | Recharts                                | Display sales, enrollment, and income analytics                 |
 | **PDF Generation**           | jsPDF                                   | Generate downloadable summary & billing PDFs                    |
 | **Styling & Responsiveness** | Tailwind CSS                            | Utility-first CSS framework for responsive design               |
+| **Development Tools**        | Ngrok                                   | Webhook testing                                                 |
 
 ---
 
-## 📋 Features
+## ✨ Key Features
 
 1. **User Authentication & Authorization**
 
@@ -84,10 +87,26 @@
 
 ---
 
-## ⚙️ Getting Started (Backend)
+## 🚀 Getting Started
 
-1. **Clone the Repository**
+1. **Frontend**
    ```bash
-   git clone https://github.com/prakash39911/LMS-NextJS-Backend.git
-   cd LMS-NextJS-Backend
+   git clone <https://github.com/prakash39911/LMS-NextJS-Frontend>
+   cd LMS-NextJS-Frontend
+   npm install
+   npm run dev
    ```
+
+````
+
+2. **Backend**
+
+   ```bash
+   git clone https://github.com/prakash39911/LMS-Express-Backend
+   cd LMS-Express-Backend
+   npm install
+   npm run dev
+   ```
+
+Ensure you set up environment variables.
+````
