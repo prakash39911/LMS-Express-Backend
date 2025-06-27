@@ -90,14 +90,13 @@
 ## 🚀 Getting Started
 
 1. **Frontend**
+
    ```bash
    git clone https://github.com/prakash39911/LMS-NextJS-Frontend
    cd LMS-NextJS-Frontend
    npm install
    npm run dev
    ```
-
-````
 
 2. **Backend**
 
@@ -109,4 +108,3 @@
    ```
 
 Ensure you set up environment variables.
-````
