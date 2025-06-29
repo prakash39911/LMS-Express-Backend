@@ -94,7 +94,7 @@ export type payment_status = (typeof payment_status)[keyof typeof payment_status
 
 export const role: {
   user: 'user',
-  system: 'system'
+  model: 'model'
 };
 
 export type role = (typeof role)[keyof typeof role]

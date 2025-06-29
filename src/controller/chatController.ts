@@ -66,9 +66,10 @@ export async function handleChat(req: Request, res: Response) {
       includeMetadata: true,
     });
 
-    const context = queryResponse?.matches
-      .map((match) => JSON.stringify(match.metadata))
-      .join(`\n\n`);
+    const context =
+      queryResponse?.matches
+        .map((match) => JSON.stringify(match.metadata))
+        .join(`\n\n`) || "No context found.";
 
     const messages = await prisma.messageStore.findMany({
       where: {
@@ -77,6 +78,7 @@ export async function handleChat(req: Request, res: Response) {
       orderBy: {
         createdAt: "asc",
       },
+      take: 10,
     });
 
     const conversationHistory = messages.map((eachMessage) => ({
@@ -84,62 +86,52 @@ export async function handleChat(req: Request, res: Response) {
       parts: [{ text: eachMessage.message }],
     }));
 
-    const prompt = `
-      You are a helpful and knowledgeable assistant for our course selling application. You will use the provided context to answer user questions about our courses. If the question is not directly related to the courses in the context, use your general knowledge to provide a helpful answer.
+    const finalPrompt = `You are a versatile AI assistant for our course application.
 
-      Context:
-      ${context}
+    Your primary role is to answer questions about our courses using the provided CONTEXT.
+    However, you must also answer general knowledge questions.
 
-      Instructions:
+    **Your Decision Process:**
+    1.  First, analyze the user's QUESTION to see if it is related to our courses.
+    2.  **If the question can be answered by the CONTEXT**, provide a concise answer based *only* on the CONTEXT.
+    3.  **If the question is clearly a general knowledge query** (e.g., "who is the prime minister of India?", "what is 2+2?"), ignore the CONTEXT and answer it using your own internal knowledge.
 
-      1.  **Understand the Current Topic:** Pay close attention to the most recent user query and the immediately preceding turns in the 'Conversation History' to identify the current topic of discussion.
-
-      2.  **Answer based on the context:** If the user's question is directly related to the courses described in the context, use that information to formulate your response. Be specific and provide relevant details about the course being discussed.
-
-      3.  **Resolve Pronouns and References:** Carefully interpret pronouns (like "it," "they," "this") and other references in the current user query based on the most recent entities or topics mentioned in the 'Conversation History'. For example, if the user asks about "it" after a course was just discussed, "it" likely refers to that course.
-
-      4.  **Reference Previous Turns Directly:** If the current question explicitly refers to something discussed earlier in the 'Conversation History', explicitly mention it in your answer. For example, "Regarding the 'SpeedUp Pages' course we were just discussing..."
-
-      5.  **Consider conversation history for relevance:** Use the 'Conversation History' to maintain context and provide a more personalized and relevant response to the current query. Focus on information related to the ongoing topic.
-
-      6.  **Address general queries:** If the user's question falls outside the scope of the provided courses or context, use your general knowledge to answer it accurately and helpfully.
-
-      7.  **Handle requests for similar courses:** If the user asks about similar courses and the context doesn't mention any related to the current topic, respond clearly and directly. You can also suggest related courses if you know of any from your general knowledge, making sure to distinguish them from the context.
-
-      8.  **Maintain accuracy:** Do not invent information or mention courses that are not present in the provided context unless you are using your general knowledge for unrelated queries. Clearly distinguish between answers based on the provided context and those based on general knowledge.
-
-      9.  **Be direct and confident:** Provide straightforward answers without unnecessary apologies or hedging.
-
-      Response:
-      `;
+    **Rules:**
+    -   Your answers must be concise and to the point.
+    -   Do not mention the "CONTEXT" or "general knowledge". Just give the final answer.
+    -   Do not make up information about courses that is not in the CONTEXT.
+    
+    ---
+    CONTEXT:
+    ${context}
+    ---
+    QUESTION:
+    ${query}
+    ---
+    `;
 
     const response = await geminiClient.models.generateContent({
-      model: "gemini-2.0-flash",
+      model: "gemini-1.5-flash",
       contents: [
-        {
-          role: "model",
-          parts: [
-            {
-              text: prompt,
-            },
-          ],
-        },
-        ...conversationHistory,
+        ...conversationHistory, // Note: conversation history now includes the latest user query via DB
         {
           role: "user",
-          parts: [{ text: query }],
+          parts: [{ text: finalPrompt }],
         },
       ],
-
       config: {
-        maxOutputTokens: 200,
+        maxOutputTokens: 100,
+        temperature: 0.3,
       },
     });
 
+    const responseText =
+      response.text || "Sorry, I couldn't process that request.";
+
     await prisma.messageStore.create({
       data: {
-        role: "system",
-        message: response.text!,
+        role: "model",
+        message: responseText,
         chatMessageId: chatSessionId,
       },
     });

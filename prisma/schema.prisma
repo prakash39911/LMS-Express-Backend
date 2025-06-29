@@ -154,5 +154,5 @@ enum payment_status {
 
 enum role {
   user
-  system
+  model
 }

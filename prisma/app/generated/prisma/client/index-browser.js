@@ -256,7 +256,7 @@ exports.payment_status = exports.$Enums.payment_status = {
 
 exports.role = exports.$Enums.role = {
   user: 'user',
-  system: 'system'
+  model: 'model'
 };
 
 exports.Prisma.ModelName = {
