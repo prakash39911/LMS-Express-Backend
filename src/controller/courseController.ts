@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { createCourseFormSchema } from "@prakash39911/sharedlms";
 import prisma from "../lib/prisma";
 import { getAuth } from "@clerk/express";
-import { elasticClient } from "../lib/elasticClient";
 import { CreatedCourseDataType, searchFunctionReturnType } from "../types";
 import {
   getStructuredCourseDataForID,
@@ -71,31 +70,6 @@ export const createCourseHandler = async (req: Request, res: Response) => {
     const courseCreated = await getStructuredCourseDataForID(
       isCourseCreated.id
     );
-
-    // if (isCourseCreated) {
-    //   const indexName = process.env.ELASTIC_PRODUCTION_INDEX;
-
-    //   if (!indexName) {
-    //     throw new Error("Index name is not present");
-    //   }
-
-    //   try {
-    //     await elasticClient.index({
-    //       index: indexName,
-    //       document: {
-    //         id: isCourseCreated.id,
-    //         title: isCourseCreated.title,
-    //         description: isCourseCreated.description,
-    //         createatedAt: new Date(isCourseCreated.createdAt)
-    //           .toISOString()
-    //           .split("T")[0],
-    //       },
-    //     });
-    //     console.log("Date Ingested Successfully to Elastic");
-    //   } catch (error) {
-    //     console.error("Error while ingesting data to Elastic", error);
-    //   }
-    // }
 
     await handleCreateEmbeddingsFromCourseDataAndStoreIntoVecorDB(
       courseCreated as CreatedCourseDataType
@@ -242,38 +216,37 @@ const searchFunction = async (
     return [];
   }
 
-  const indexName = process.env.ELASTIC_PRODUCTION_INDEX;
-
-  if (!indexName) {
-    console.error("Elasticsearch index not configured");
-    return [];
-  }
-
   console.log("Search string:", searchString);
-  console.log("Index name:", indexName);
 
   try {
-    const response = await elasticClient.search({
-      index: indexName,
-      query: {
-        bool: {
-          should: [
-            { match_phrase_prefix: { title: searchString.trim() } },
-            {
-              match: {
-                title: { query: searchString.trim(), fuzziness: "AUTO" },
-              },
+    const courses = await prisma.course.findMany({
+      where: {
+        OR: [
+          {
+            title: {
+              contains: searchString,
+              mode: "insensitive",
             },
-          ],
-        },
+          },
+          {
+            description: {
+              contains: searchString,
+              mode: "insensitive",
+            },
+          },
+        ],
+      },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        createdAt: true,
       },
     });
 
-    return response.hits.hits.map(
-      (eachObj) => eachObj._source as searchFunctionReturnType
-    );
+    return courses;
   } catch (error) {
-    console.error("Elasticsearch search error:", error);
+    console.error("Search error:", error);
     return [];
   }
 };
@@ -357,17 +330,17 @@ export const getAllCourse = async (req: Request, res: Response) => {
 
     // Only Search Query Exists
     else if (searchString && ratingArray.length === 0 && !pricesString) {
-      const elasticResults = await searchFunction(searchString);
+      const searchResults = await searchFunction(searchString);
       console.log(
-        `Elastic search results count for "${searchString}":`,
-        elasticResults.length
+        `Search results count for "${searchString}":`,
+        searchResults.length
       );
 
-      if (elasticResults.length === 0) {
+      if (searchResults.length === 0) {
         results = [];
       } else {
         results = await Promise.all(
-          elasticResults.map((item) =>
+          searchResults.map((item) =>
             getCourseForParticularId(item.id).catch(() => null)
           )
         );

@@ -8,7 +8,7 @@ export type searchFunctionReturnType = {
   id: string;
   title: string;
   description: string;
-  createdAt: string;
+  createdAt: Date;
 };
 
 export type eachCourseType = {
