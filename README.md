@@ -13,6 +13,10 @@
 
 ---
 
+## ✨ Watch Video Demo
+
+- **Click on the image to watch**
+
 [![Watch the video](https://res.cloudinary.com/prakashcloud/image/upload/v1751171417/Screenshot_from_2025-06-29_09-45-22_lfkq6t.png)](https://res.cloudinary.com/prakashcloud/video/upload/v1751347629/LMS_Demo_1_vvwgtv.mp4)
 
 ---
